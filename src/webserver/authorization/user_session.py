@@ -8,6 +8,7 @@ google = oauth_objects[1]
 
 authorization = Blueprint("authorization", __name__)
 
+
 @authorization.route('/login')
 def login():
     google = oauth.create_client('google')
@@ -22,7 +23,7 @@ def authorize():
 
     resp = google.get('userinfo')
     user_info = resp.json()
-    user = oauth.google.userinfo() 
+    user = oauth.google.userinfo()
     session['profile'] = user_info
 
     session.permanent = True
