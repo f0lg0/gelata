@@ -10,24 +10,21 @@ authorization = Blueprint("authorization", __name__)
 
 @authorization.route('/login')
 def login():
-    google = oauth.create_client('google')  # create the google oauth client
+    google = oauth.create_client('google')
     redirect_uri = url_for('authorization.authorize', _external=True)
     return google.authorize_redirect(redirect_uri)
 
 
 @authorization.route('/authorize')
 def authorize():
-    google = oauth.create_client('google')  # create the google oauth client
-    # Access token from google (needed to get user info)
+    google = oauth.create_client('google')
     token = google.authorize_access_token()
-    # userinfo contains stuff u specificed in the scrope
+
     resp = google.get('userinfo')
     user_info = resp.json()
-    user = oauth.google.userinfo()  # uses openid endpoint to fetch user info
-    # Here you use the profile/user data that you got and query your database find/register the user
-    # and set ur own data in the session not the profile from google
+    user = oauth.google.userinfo() 
     session['profile'] = user_info
-    # make the session permanant so it keeps existing after broweser gets closed
+
     session.permanent = True
     return redirect('/')
 
