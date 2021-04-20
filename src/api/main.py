@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from datetime import timedelta
-from flask import Flask, session
+from flask import Flask, session, render_template
 from user_session import authorization
 from login_required import login_required
 
@@ -22,7 +22,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 @login_required
 def home():
     email = dict(session)['profile']['email']
-    return f"Hello, {email}"
+    return render_template("index.html", email=email)
 
 if __name__ == "__main__":
     app.run(debug=True)

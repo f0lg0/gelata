@@ -1,4 +1,4 @@
-from flask import session
+from flask import session, render_template
 from functools import wraps
 
 
@@ -10,5 +10,5 @@ def login_required(f):
         # the other data for that user/check if they exist
         if user:
             return f(*args, **kwargs)
-        return "You are not logged in"
+        return render_template("login.html")
     return decorated_function
