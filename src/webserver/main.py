@@ -17,7 +17,7 @@ app.register_blueprint(authorization)
 
 app.secret_key = os.getenv("APP_SECRET_KEY")
 app.config['SESSION_COOKIE_NAME'] = 'google-login-session'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
 
 
 @app.route('/')
