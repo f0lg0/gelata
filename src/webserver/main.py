@@ -11,7 +11,8 @@ from flask import Flask, session, render_template
 from user_session import authorization
 from login_required import login_required
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="", static_folder="web/static",
+            template_folder="web/templates")
 app.register_blueprint(authorization)
 
 app.secret_key = os.getenv("APP_SECRET_KEY")
@@ -23,7 +24,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 @login_required
 def home():
     email = dict(session)['profile']['email']
-    return render_template("index.html", email=email)
+    return render_template("home.html", email=email)
 
 
 if __name__ == "__main__":
