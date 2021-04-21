@@ -49,7 +49,7 @@ template.innerHTML = `
             margin-top: 18px;
         }
         
-        .top .text p {
+        .top .text p, ::slotted(p) {
             font-size: 20px;
             font-weight: bold;
         }
@@ -60,7 +60,7 @@ template.innerHTML = `
             height: 70px;
         }
         
-        .ticket_card .center .container .text {
+        .ticket_card .center .container .text, .ticket_card .center .container .text ::slotted(p) {
             font-size: 16px;
             font-weight: 300;
         }
@@ -85,7 +85,7 @@ template.innerHTML = `
             cursor: pointer;
         }
         
-        .ticket_card .bottom p {
+        .ticket_card .bottom p, .ticket_card .bottom ::slotted(p) {
             margin-top: 10px;
         }
     </style>
@@ -95,7 +95,9 @@ template.innerHTML = `
                 <div class="icon"></div>
             </div>
             <div class="text">
-                <p>Titolo</p>
+                <slot name="titolo">
+                    <p>Titolo</p>
+                </slot>
             </div>
         </div>
         <div class="center">
@@ -129,8 +131,29 @@ export class TicketCard extends HTMLElement {
         // clone template content nodes to the shadow DOM
         shadowRoot.appendChild(template.content.cloneNode(true));
     }
+    static get observedAttributes() {
+        return ["titolo", "payload_0", "payload_1"];
+    }
     connectedCallback() {
-        console.log("TicketCard added to DOM");
+        if (!this.titolo) {
+            this.titolo = "Titolo";
+        }
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+        if (oldVal !== newVal) {
+            switch (name) {
+                case "titolo":
+                    this.titolo = newVal;
+                    break;
+                case "payload_0":
+                    this.payload_0 = newVal;
+                    break;
+
+                case "payload_1":
+                    this.payload_1 = newVal;
+                    break;
+            }
+        }
     }
 }
 
