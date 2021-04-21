@@ -106,7 +106,9 @@ template.innerHTML = `
                     <div class="icon"></div>
                 </div>
                 <div class="text">
-                    <p>lorem ipsum</p>
+                    <slot name="campo_0">
+                        <p>lorem ipsum</p>
+                    </slot>
                 </div>
             </div>
             <div class="container">
@@ -114,7 +116,9 @@ template.innerHTML = `
                     <div class="icon"></div>
                 </div>
                 <div class="text">
-                    <p>lorem ipsum</p>
+                    <slot name="campo_1">
+                        <p>lorem ipsum</p>
+                    </slot>
                 </div>
             </div>
         </div>
@@ -130,30 +134,6 @@ export class TicketCard extends HTMLElement {
         const shadowRoot = this.attachShadow({ mode: "open" });
         // clone template content nodes to the shadow DOM
         shadowRoot.appendChild(template.content.cloneNode(true));
-    }
-    static get observedAttributes() {
-        return ["titolo", "payload_0", "payload_1"];
-    }
-    connectedCallback() {
-        if (!this.titolo) {
-            this.titolo = "Titolo";
-        }
-    }
-    attributeChangedCallback(name, oldVal, newVal) {
-        if (oldVal !== newVal) {
-            switch (name) {
-                case "titolo":
-                    this.titolo = newVal;
-                    break;
-                case "payload_0":
-                    this.payload_0 = newVal;
-                    break;
-
-                case "payload_1":
-                    this.payload_1 = newVal;
-                    break;
-            }
-        }
     }
 }
 
