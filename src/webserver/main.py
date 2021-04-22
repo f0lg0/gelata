@@ -27,7 +27,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
 @app.route('/')
 @login_required
 def home():
-    return render_template("home.html", user=dict(session)['profile'])
+    return render_template("home.html", user=dict(session)['profile'], tickets=3)
 
 
 if __name__ == "__main__":

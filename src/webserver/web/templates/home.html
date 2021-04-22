@@ -17,26 +17,33 @@
 
         <navbar-component></navbar-component>
 
-        <div class="banner">
-            <div class="content">
-                <h2>Dashboard</h2>
-                <h1>Ciao, <br />{{ user.email }}</h1>
+        <div class="main_frame">
+            <div class="banner">
+                <div class="content">
+                    <h2>Dashboard</h2>
+                    <h1>Ciao, <br />{{ user.email }}</h1>
+                </div>
             </div>
-        </div>
 
-        <ticket-card>
-            <p slot="titolo">battiu</p>
-            <p slot="campo_0">frobbio</p>
-            <p slot="campo_1">folbo</p>
-        </ticket-card>
+            <div class="tickets_feed">
+                <div class="tickets_container">
+                    {% for i in range(tickets) %}
+                    <ticket-card>
+                        <p slot="titolo">battiu</p>
+                        <p slot="campo_0">frobbio</p>
+                        <p slot="campo_1">folbo</p>
+                    </ticket-card>
+                    {% endfor %}
+                </div>
+            </div>
 
-        <div style="display: none">
-            <p id="user_pic">{{ user.picture }}</p>
+            <div style="display: none">
+                <p id="user_pic">{{ user.picture }}</p>
+            </div>
         </div>
 
         <script>
             // ! DA IMPLEMENTARE PER FORZA CON LA NAVBAR
-
             function logout() {
                 location.href = "/logout";
             }

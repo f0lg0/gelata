@@ -1,17 +1,12 @@
 const template = document.createElement("template");
 template.innerHTML = `
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
         .ticket_card {
             width: 400px;
             height: 200px;
-            margin: auto;
-            margin-top: 50px;
             user-select: none;
+            margin-right: 50px;
+            margin-bottom: 70px;
         }
         
         .ticket_card .top {
