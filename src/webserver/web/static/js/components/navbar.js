@@ -67,6 +67,12 @@ template.innerHTML = `
             border-radius: 25px;
 
         }
+
+        .profile_img img {
+            width: 100%;
+            height: 100%;
+            border-radius: 25px;
+        }
     </style>
     <div id="navbar">
         <div class="left"></div>
@@ -77,7 +83,9 @@ template.innerHTML = `
                 </div>
             </div>
             <div class="profile_container">
-                <div class="profile_img"></div>
+                <div class="profile_img">
+                    <img id="profile_pic" src="" />
+                </div>
             </div>
         </div>
     </div>
@@ -93,3 +101,9 @@ export class Navbar extends HTMLElement {
 }
 
 window.customElements.define("navbar-component", Navbar);
+
+const profile_pic_el = document
+    .querySelector("body > navbar-component")
+    .shadowRoot.querySelector("#profile_pic");
+
+export { profile_pic_el };

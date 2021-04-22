@@ -16,6 +16,7 @@
     <body>
         <script type="module" src="/js/components/ticket_card.js"></script>
         <script type="module" src="/js/components/navbar.js"></script>
+        <script type="module" src="/js/set_profile_pic.js"></script>
 
         <navbar-component></navbar-component>
 
@@ -31,6 +32,10 @@
             <p slot="campo_0">frobbio</p>
             <p slot="campo_1">folbo</p>
         </ticket-card>
+
+        <div style="display: none">
+            <p id="user_pic">{{ user.picture }}</p>
+        </div>
 
         <script>
             function logout() {
