@@ -72,7 +72,7 @@ template.innerHTML = `
         <div class="left"></div>
         <div class="right">
             <div class="logout_btn_container">
-                <div class="logout_btn">
+                <div class="logout_btn" onclick="logout()">
                     <p>Logout</p>
                 </div>
             </div>
