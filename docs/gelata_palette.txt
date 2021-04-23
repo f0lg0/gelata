@@ -1,0 +1,9 @@
+--Dark Mode
+
+    * main-color: #101015 --> usato per lo sfondo
+    * secondary-color: #2121B -->  usato per la navbar e la barra a sx nella home
+    * text-color: #F2F2F2 --> colore principale del testo
+    * non-active-element: #8F8F94 --> grigio usato ad esempio quando un testo/elemento non è selezionato
+    * important-red: #FF2825 --> rosso che spicca, usare per azioni importanti
+    * muted-red: #E76363 --> rosso meno accesso
+    * purple-accent: #AC6DDE --> colore da usare poco, in piccoli spruzzi
