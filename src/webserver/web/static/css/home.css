@@ -34,6 +34,16 @@ body {
     background-color: #21212b;
 }
 
+@media only screen and (max-width: 700px) {
+    .left_bar {
+        display: none;
+    }
+
+    .dashboard {
+        width: 100%;
+    }
+}
+
 .banner {
     width: 100%;
     height: 270px;
