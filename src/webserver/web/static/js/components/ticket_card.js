@@ -2,11 +2,9 @@ const template = document.createElement("template");
 template.innerHTML = `
     <style>
         .ticket_card {
-            width: 400px;
-            height: 200px;
+            max-width: 400px;
+            width: 100%;
             user-select: none;
-            margin-right: 50px;
-            margin-bottom: 70px;
         }
         
         .ticket_card .top {

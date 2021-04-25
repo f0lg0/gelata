@@ -47,8 +47,7 @@ template.innerHTML = `
         }
 
         .right {
-            max-width: 235px;
-            width: 25%;
+            width: 235px;
 
             display: flex;
             flex-direction: row;
@@ -103,6 +102,19 @@ template.innerHTML = `
             width: 100%;
             height: 100%;
             border-radius: 25px;
+        }
+
+        @media only screen and (max-width: 500px) {
+            .logout_btn_container {
+                display: none;
+            }
+
+            .left {
+                width: 80%;
+            }
+            .right {
+                width: 20%;
+            }
         }
     </style>
     <div id="navbar">
