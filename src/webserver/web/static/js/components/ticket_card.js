@@ -1,6 +1,10 @@
 const template = document.createElement("template");
 template.innerHTML = `
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
         .ticket_card {
             max-width: 400px;
             width: 100%;
@@ -42,7 +46,7 @@ template.innerHTML = `
             margin-top: 18px;
         }
         
-        .top .text p, ::slotted(p) {
+        .top .text p, .top .text ::slotted(p) {
             font-size: 20px;
             font-weight: bold;
         }
@@ -78,7 +82,7 @@ template.innerHTML = `
             cursor: pointer;
         }
         
-        .ticket_card .bottom p, .ticket_card .bottom ::slotted(p) {
+        .ticket_card .bottom p, .ticket_card .bottom::slotted(p) {
             margin-top: 10px;
         }
     </style>
