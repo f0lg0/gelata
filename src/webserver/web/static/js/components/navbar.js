@@ -95,7 +95,7 @@ template.innerHTML = `
 
             background-color: #DE9191;
             border-radius: 25px;
-
+            cursor: pointer;
         }
 
         .profile_img img {
@@ -138,7 +138,7 @@ template.innerHTML = `
                     <p>Logout</p>
                 </div>
             </div>
-            <div class="profile_container">
+            <div class="profile_container" onclick="routeToProfile()">
                 <div class="profile_img">
                     <img id="profile_pic" src="" />
                 </div>
