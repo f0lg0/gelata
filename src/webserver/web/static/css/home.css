@@ -18,8 +18,7 @@ body {
 }
 
 .dashboard {
-    width: 80%;
-    height: 100%;
+    flex: 0.8;
 }
 
 @media only screen and (min-width: 1264px) {
@@ -30,7 +29,7 @@ body {
 
 .left_bar {
     max-width: 250px;
-    width: 20%;
+    flex: 0.2;
     background-color: #21212b;
 }
 
@@ -40,7 +39,7 @@ body {
     }
 
     .dashboard {
-        width: 100%;
+        flex: 1;
     }
 }
 
