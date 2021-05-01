@@ -7,6 +7,9 @@ sys.path.insert(1, "./tickets_handler")
 from dotenv import load_dotenv
 load_dotenv()
 
+# database
+import database_handler
+
 from datetime import timedelta
 from flask import Flask, session, render_template
 from user_session import authorization
