@@ -8,11 +8,45 @@
     </head>
 
     <body>
-        <h1>Test</h1>
+        <h1>Carica ticket</h1>
         <form action="http://127.0.0.1:5000/carica" method="post">
-            <p>Enter Name:</p>
-            <p><input type="text" name="nm" /></p>
-            <p><input type="submit" value="submit" /></p>
+            <div>
+                <label for="tipologia">Seleziona una tipologia:</label>
+
+                <select name="tipologia" id="tipologia">
+                    <option value="Giornaliero">Giornaliero</option>
+                    <option value="Settimanale">Settimanale</option>
+                    <option value="Mensile">Mensile</option>
+                    <option value="Annuale">Annuale</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="attività">Identifica l'attività:</label>
+
+                <select name="attività" id="attività">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                </select>
+            </div>
+
+            <div>
+                <p>Attrezzature</p>
+                <input type="text" />
+            </div>
+
+            <div>
+                <p>Ore</p>
+                <input type="time" />
+            </div>
+
+            <div>
+                <p>Note</p>
+                <input type="text" />
+            </div>
+
+            <button type="submit">Carica</button>
         </form>
     </body>
 </html>
