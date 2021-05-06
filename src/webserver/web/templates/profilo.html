@@ -5,8 +5,48 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>GELATA - Il mio profilo</title>
+        <link rel="stylesheet" href="/css/profilo.css" />
     </head>
     <body>
-        Sei loggato come {{ user.email }}
+        <script type="module" src="/js/components/navbar.js"></script>
+        <script type="module" src="/js/set_profile_pic.js"></script>
+
+        <navbar-component></navbar-component>
+
+        <div class="frame">
+            <div class="card">
+                <div class="wrapper">
+                    <div class="profile_pic">
+                        <img src="{{ user.picture }}" />
+                    </div>
+                    <div class="name">
+                        <p>{{ user.name }}</p>
+                    </div>
+                    <div class="email">
+                        <p>{{ user.email }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- janky -->
+        <div style="display: none">
+            <p id="user_pic">{{ user.picture }}</p>
+        </div>
+
+        <script>
+            // ! DA IMPLEMENTARE PER FORZA CON LA NAVBAR
+            function logout() {
+                location.href = "/logout";
+            }
+
+            function routeHome() {
+                location.href = "/";
+            }
+
+            function routeToProfile() {
+                location.href = "/profilo";
+            }
+        </script>
     </body>
 </html>
