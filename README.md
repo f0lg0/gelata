@@ -23,13 +23,13 @@ Download this github repository locally.
 Open a terminal (PowerShell on Windows) in the root folder (gelata-main) and run:
 
 ```
-pip install vitrualenv
+pip install virtualenv
 ```
 
 Create then the virtual environment:
 
 ```
-virtualenv .
+virtualenv venv
 ```
 
 Activate it:
@@ -37,7 +37,7 @@ Activate it:
 On Windows run
 
 ```
-.\env\Scripts\activate.bat
+.venv\env\Scripts\activate.bat
 ```
 
 On Linux:
