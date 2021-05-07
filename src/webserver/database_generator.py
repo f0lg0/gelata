@@ -4,25 +4,6 @@ import os
 
 from db_setup_queries import setup_queries
 
-'''
-NOTE (TODO?)
-
-potevamo creare una funzione wrapper che esegue una query passata
-come parametro anziché creare una funzione per tabella
-
-tale funzione sarà sicuramente implementata nel modulo 'database_ops' (gestisce le operazioni CRUD del db)
-
-la soluzione corrente ha alcuni vantaggi:
-    - leggibilità del codice
-    - è facile modificare singolarmente le tabelle
-    - le funzioni si possono estendere con eventuali aggiunte
-    - le query sono formattate su più linee
-
-ma ha anche svantaggi:
-    - codice praticamente identico ripetuto molte volte
-    - non è molto comodo controllare il return type di ogni funzione manualmente
-'''
-
 
 class DatabaseGenerator:
     def __init__(self, db_path):
