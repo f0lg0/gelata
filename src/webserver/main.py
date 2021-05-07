@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # database
-import database_handler
+from database_generator import generate_database
 
 from datetime import timedelta
 from flask import Flask, session, render_template
@@ -34,5 +34,10 @@ def home():
     return render_template("home.html", user=dict(session)['profile'], tickets=16)
 
 
-if __name__ == "__main__":
+def main():
+    generate_database()
     app.run(debug=True)
+
+
+if __name__ == "__main__":
+    main()
