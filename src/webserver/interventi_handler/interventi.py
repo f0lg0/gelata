@@ -1,10 +1,10 @@
 from flask import Blueprint, current_app, render_template, request, redirect
 from login_required import login_required
 
-tickets_handler = Blueprint("tickets_handler", __name__)
+interventi_handler = Blueprint("interventi_handler", __name__)
 
 
-@tickets_handler.route("/carica", methods=["GET", "POST"])
+@interventi_handler.route("/carica", methods=["GET", "POST"])
 @login_required
 def serve_tickets_page():
     if request.method == "GET":
