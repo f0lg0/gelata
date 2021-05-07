@@ -1,39 +1,34 @@
-import mariadb
+import sqlite3
 import sys
-
-conn = None
-cur = None
+import os
 
 
 class DatabaseHandler:
     def __init__(self):
-        # Connect to MariaDB Platform
+        self.DB_PATH = "../database/gelata.db"
+
+        if os.path.isfile(self.DB_PATH):
+            self.CREATED = True
+        else:
+            self.CREATED = False
+
         try:
-            self.__conn = mariadb.connect(
-                user="dev",
-                password="dev",
-                host="localhost",
-                port=3306,
-                database="gelata"
-            )
-        except mariadb.Error as e:
-            print(f"Error connecting to MariaDB Platform: {e}")
+            self.conn = sqlite3.connect(self.DB_PATH)
+            self.c = self.conn.cursor()
+        except Exception as e:
+            print(f"Error while connecting to sqlite database: {e}")
             sys.exit(1)
 
-        self.__cur = self.__conn.cursor()
-
-        tables = self.get_tables()
-        print(tables)
-        if "Utente" not in tables[0]:
-            self.__create_user_table()
-
-    def get_tables(self):
-        self.__cur.execute("SHOW TABLES;")
-        return self.__cur.fetchall()
+        if not self.CREATED:
+            print("[!] Initializing database...")
+            self._create_tables()
+            print("[!] Database created.")
 
     def __create_user_table(self):
         try:
-            self.__cur.execute('''
+            print("[+] Creating user table...")
+
+            self.c.execute('''
                 CREATE TABLE Utente (
                     id INT PRIMARY KEY,
                     username VARCHAR(255),
@@ -42,11 +37,16 @@ class DatabaseHandler:
                 )
             ''')
 
+            self.conn.commit()
+            print("[+] Done!")
         except Exception as e:
             print(e)
             return False
 
         return True
+
+    def _create_tables(self):
+        self.__create_user_table()
 
 
 db = DatabaseHandler()
