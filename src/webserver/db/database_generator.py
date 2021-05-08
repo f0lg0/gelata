@@ -3,6 +3,7 @@ import sys
 import os
 
 from db_setup_queries import setup_queries
+from watchdog import watchdog_init
 
 
 class DatabaseGenerator:
@@ -63,3 +64,5 @@ def generate_database():
     print("*** Called DatabaseGenerator init ***")
     db_g = DatabaseGenerator("../database/gelata.db")
     db_g.close_connection()
+
+    watchdog_init()

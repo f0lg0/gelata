@@ -1,8 +1,9 @@
 import os
 import sys
-sys.path.insert(1, './oauth')
-sys.path.insert(1, './authorization')
-sys.path.insert(1, "./interventi_handler")
+sys.path.append("./oauth")
+sys.path.append("./authorization")
+sys.path.append("./interventi_handler")
+sys.path.append("./db")
 
 from dotenv import load_dotenv
 load_dotenv()
