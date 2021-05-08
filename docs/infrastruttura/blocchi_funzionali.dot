@@ -1,0 +1,40 @@
+graph G {
+    layout=fdp; 
+    overlap = false;
+    main [style=bold];
+    subgraph clusterFlaskBlueprints {
+        label = "Flask Blueprints";
+
+        auth -- OAuthHandler;
+        auth -- LoginMiddleware;
+
+        interventi;
+    }
+    subgraph clusterUsers {
+        label = "Users";
+
+        subgraph Session {
+            label = "Session";
+
+            login;
+            logout;
+            profile;
+        }
+    }
+    login -- auth;
+    logout -- auth;
+
+    subgraph clusterDatabase {
+        label = "Database";
+
+        db_ops;
+        db_gen;
+    }
+
+    watchdog -- clusterDatabase;
+    watchdog -- clusterUsers;
+
+    main -- clusterFlaskBlueprints;
+    main -- clusterUsers;
+    main --clusterDatabase;
+}

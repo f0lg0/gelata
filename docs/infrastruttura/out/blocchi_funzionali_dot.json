@@ -1,0 +1,160 @@
+{
+  "name": "G",
+  "directed": false,
+  "strict": false,
+  "label": "",
+  "layout": "fdp",
+  "overlap": "false",
+  "_subgraph_cnt": 4,
+  "objects": [
+    {
+      "name": "clusterFlaskBlueprints",
+      "label": "Flask Blueprints",
+      "layout": "fdp",
+      "overlap": "false",
+      "_gvid": 0,
+      "nodes": [
+        5,6,7,8
+      ],
+      "edges": [
+        3,4
+      ]
+    },
+    {
+      "name": "clusterUsers",
+      "label": "Users",
+      "layout": "fdp",
+      "overlap": "false",
+      "_gvid": 1,
+      "subgraphs": [
+        2
+      ],
+      "nodes": [
+        9,10,11
+      ]
+    },
+    {
+      "name": "Session",
+      "label": "Session",
+      "layout": "fdp",
+      "overlap": "false",
+      "_gvid": 2,
+      "nodes": [
+        9,10,11
+      ]
+    },
+    {
+      "name": "clusterDatabase",
+      "label": "Database",
+      "layout": "fdp",
+      "overlap": "false",
+      "_gvid": 3,
+      "nodes": [
+        12,13
+      ]
+    },
+    {
+      "_gvid": 4,
+      "name": "main",
+      "label": "\\N",
+      "style": "bold"
+    },
+    {
+      "_gvid": 5,
+      "name": "auth",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 6,
+      "name": "OAuthHandler",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 7,
+      "name": "LoginMiddleware",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 8,
+      "name": "interventi",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 9,
+      "name": "login",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 10,
+      "name": "logout",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 11,
+      "name": "profile",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 12,
+      "name": "db_ops",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 13,
+      "name": "db_gen",
+      "label": "\\N"
+    },
+    {
+      "_gvid": 14,
+      "name": "watchdog",
+      "label": "\\N"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 4,
+      "head": -1
+    },
+    {
+      "_gvid": 1,
+      "tail": 4,
+      "head": -1
+    },
+    {
+      "_gvid": 2,
+      "tail": 4,
+      "head": -1
+    },
+    {
+      "_gvid": 3,
+      "tail": 5,
+      "head": 6
+    },
+    {
+      "_gvid": 4,
+      "tail": 5,
+      "head": 7
+    },
+    {
+      "_gvid": 5,
+      "tail": 9,
+      "head": 5
+    },
+    {
+      "_gvid": 6,
+      "tail": 10,
+      "head": 5
+    },
+    {
+      "_gvid": 7,
+      "tail": 14,
+      "head": -1
+    },
+    {
+      "_gvid": 8,
+      "tail": 14,
+      "head": -1
+    }
+  ]
+}
