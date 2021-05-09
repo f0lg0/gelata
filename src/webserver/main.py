@@ -10,6 +10,7 @@ load_dotenv()
 
 # database
 from database_generator import generate_database
+from database_ops import dbops_init
 
 from datetime import timedelta
 from flask import Flask, session, render_template
@@ -37,6 +38,7 @@ def home():
 
 def main():
     generate_database()
+    dbops_init("../database/gelata.db")
     app.run(debug=True)
 
 

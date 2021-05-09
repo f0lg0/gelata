@@ -16,29 +16,30 @@ class LogEvent:
 class Watchdog:
     def __init__(self, path):
         self.DB_PATH = path
-
-        try:
-            self.conn = sqlite3.connect(self.DB_PATH)
-            self.c = self.conn.cursor()
-
-            print("[*] Watchdog service started [*]")
-        except Exception as e:
-            print(f"Error while connecting to sqlite database: {e}")
-            sys.exit(1)
+        print("[*] Watchdog service initialized [*]")
 
     def log(self, author, description, query):
-        log = LogEvent(author, description, query)
+        try:
+            conn = sqlite3.connect(self.DB_PATH)
+            c = conn.cursor()
 
-        self.c.execute(f'''
-            INSERT INTO TipologiaEventi (descrizione, enabled) 
-            VALUES ("{log.description}", 1)
-        ''')
+            log = LogEvent(author, description, query)
 
-        self.c.execute(f'''
-            INSERT INTO Watchdog (ts, note, tipologiaEventiId, utenteId)
-            VALUES ({log.ts}, "{log.query}", {self.c.lastrowid}, {log.author})
-        ''')
+            c.execute(f'''
+                INSERT INTO TipologiaEventi (descrizione, enabled) 
+                VALUES ("{log.description}", 1)
+            ''')
 
-        self.conn.commit()
+            parsed_query = log.query.rstrip().replace('"', "'")
+            c.execute(f'''
+                INSERT INTO Watchdog (ts, note, tipologiaEventiId, utenteId)
+                VALUES ({log.ts}, "{parsed_query}", {c.lastrowid}, {log.author})
+            ''')
 
-        return log
+            conn.commit()
+
+        except Exception as e:
+            print("[!] Error while logging: ", e)
+            return False
+
+        return True
