@@ -42,8 +42,3 @@ class Watchdog:
         self.conn.commit()
 
         return log
-
-
-def watchdog_init():
-    wd = Watchdog("../database/gelata.db")
-    wd.log(-1, "testing", "SHOW TABLES")

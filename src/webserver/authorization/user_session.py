@@ -2,6 +2,8 @@ from flask import Blueprint, current_app, url_for, redirect, session, render_tem
 from oauth_wrapper import OAuthWrapper
 from login_required import login_required
 
+from database_ops import dbops_user_signup
+
 oauth_wrapper = OAuthWrapper(current_app)
 oauth_objects = oauth_wrapper.get_auth_object()
 oauth = oauth_objects[0]
@@ -28,6 +30,10 @@ def authorize():
     session["profile"] = user_info
 
     session.permanent = True
+
+    # ! sqlite3.ProgrammingError: attenzione ai threads in cui vengono creati gli oggetti sqlite
+    dbops_user_signup(user_info)
+
     return redirect("/")
 
 
