@@ -28,7 +28,20 @@ class Watchdog:
 
     def log(self, author, description, query):
         log = LogEvent(author, description, query)
-        print(log)
+
+        self.c.execute(f'''
+            INSERT INTO TipologiaEventi (descrizione, enabled) 
+            VALUES ("{log.description}", 1)
+        ''')
+
+        self.c.execute(f'''
+            INSERT INTO Watchdog (ts, note, tipologiaEventiId, utenteId)
+            VALUES ({log.ts}, "{log.query}", {self.c.lastrowid}, {log.author})
+        ''')
+
+        self.conn.commit()
+
+        return log
 
 
 def watchdog_init():
