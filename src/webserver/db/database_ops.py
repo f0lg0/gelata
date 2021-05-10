@@ -49,20 +49,21 @@ def dbops_user_signup(user):
             }
 
         # prima volta che incontriamo questo utente
+        profilo_query = f'''
+            INSERT INTO Profilo (descrizione, enabled)
+            VALUES ("???", 1)
+        '''
+        c.execute(profilo_query)
+
+        profilo_id = c.lastrowid
 
         utente_query = f'''
-            INSERT INTO Utente (username, qualifica, enabled)
-            VALUES ("{user['email']}", "???", 1)
+            INSERT INTO Utente (username, qualifica, profiloId, enabled)
+            VALUES ("{user['email']}", "???", {profilo_id}, 1)
         '''
         c.execute(utente_query)
 
         user_id = c.lastrowid
-
-        profilo_query = f'''
-            INSERT INTO Profilo (utenteId, descrizione, enabled)
-            VALUES ({user_id}, "???", 1)
-        '''
-        c.execute(profilo_query)
 
         conn.commit()
     except Exception as e:
@@ -75,8 +76,8 @@ def dbops_user_signup(user):
 
     conn.close()
 
-    wd.log(user_id, "Inserimento dettagli utente in tabella Utente", utente_query)
     wd.log(user_id, "Creazione profilo dell'utente", profilo_query)
+    wd.log(user_id, "Inserimento dettagli utente in tabella Utente", utente_query)
 
     return {
         "success": True,

@@ -25,6 +25,7 @@ class Watchdog:
 
             log = LogEvent(author, description, query)
 
+            # TODO: controlla se l'attività che stiamo loggando esiste già nella tabella, se si allora non inserire
             c.execute(f'''
                 INSERT INTO TipologiaEventi (descrizione, enabled) 
                 VALUES ("{log.description}", 1)

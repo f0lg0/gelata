@@ -96,7 +96,6 @@ setup_queries = [
         "query": '''
             CREATE TABLE Profilo (
                 id INTEGER PRIMARY KEY,
-                utenteId INTEGER REFERENCES Utente(id),
                 descrizione VARCHAR(255),
                 enabled BOOL
             )
@@ -175,6 +174,7 @@ setup_queries = [
                 id INTEGER PRIMARY KEY,
                 username VARCHAR(255),
                 qualifica VARCHAR(255),
+                profiloId INTEGER REFERENCES Profilo(id),
                 enabled BOOL
             )
         '''
