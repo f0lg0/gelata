@@ -10,5 +10,5 @@ def serve_tickets_page():
     if request.method == "GET":
         return render_template("carica.html")
     if request.method == "POST":
-        print(request.form)  # estraendo lo username inserito
+        print(request.form)
         return redirect("/")

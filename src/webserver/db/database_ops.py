@@ -12,7 +12,7 @@ una soluzione sarebbe ignorare questi errori di threads passando una flag alla c
 di sicurezza: si potrebbe corrompere della memoria nel database SE NON SI GESTISTONO I LOCKS MANUALMENTE (queue etc)
 
 la soluzione adottata è quella di istanziare e chiudere una nuova connessione ogni volta
-così si sfruttano i metodi e le precauzioni che adotta sqlite3 in maniera automatica
+così si sfruttano i metodi e le precauzioni di locking che adotta sqlite3 in maniera automatica
 '''
 
 import sqlite3
@@ -42,7 +42,11 @@ def dbops_user_signup(user):
         exists = query.fetchall()[0][0]
 
         if exists != 0:
-            return None
+            return {
+                "success": True,
+                "signup": False,
+                "message": "Utente già registrato"
+            }
 
         # prima volta che incontriamo questo utente
 
@@ -63,11 +67,69 @@ def dbops_user_signup(user):
         conn.commit()
     except Exception as e:
         print(f"Error while connecting to sqlite database: {e}")
-        return False
+        return {
+            "success": False,
+            "signup": False,
+            "message": "Errore interno"
+        }
 
     conn.close()
 
     wd.log(user_id, "Inserimento dettagli utente in tabella Utente", utente_query)
     wd.log(user_id, "Creazione profilo dell'utente", profilo_query)
 
-    return True
+    return {
+        "success": True,
+        "signup": True,
+        "message": "Utente registrato con successo"
+    }
+
+
+def dbops_save_intervento(data):
+    '''
+    data {
+        timestamp
+        note
+        enabled
+        sede {
+            descrizione
+            enabled
+        }
+        plesso {
+            descrizione
+            enabled
+        }
+        vano { --> no FK ma tabella
+            codice
+            descrizione
+            enabled
+        }
+        attività {
+            descrizione
+            enabled
+            frequenza {
+                descrizione
+                enabled
+            }
+        }
+        prodotto { --> no FK ma tabella
+            descrizione
+            enabled
+        }
+        attrezzatura { --> no FK ma tabella
+            descrizione
+            enabled
+        }
+    }
+    '''
+
+    if data == None:
+        return {
+            "success": False,
+            "message": "L'intervento è nullo"
+        }
+
+    return {
+        "success": True,
+        "message": "Intervento caricato con successo"
+    }
