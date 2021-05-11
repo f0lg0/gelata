@@ -1,3 +1,4 @@
+from os import terminal_size
 import sqlite3
 import sys
 import time
@@ -25,16 +26,22 @@ class Watchdog:
 
             log = LogEvent(author, description, query)
 
-            # TODO: controlla se l'attività che stiamo loggando esiste già nella tabella, se si allora non inserire
-            c.execute(f'''
-                INSERT INTO TipologiaEventi (descrizione, enabled) 
-                VALUES ("{log.description}", 1)
+            te_query = c.execute(f'''
+                SELECT id FROM TipologiaEventi WHERE descrizione = "{log.description}"
             ''')
+
+            te_id = te_query.fetchall()
+            print(te_id)
+            if len(te_id) == 0:
+                c.execute(f'''
+                    INSERT INTO TipologiaEventi (descrizione, enabled) 
+                    VALUES ("{log.description}", 1)
+                ''')
 
             parsed_query = log.query.rstrip().replace('"', "'")
             c.execute(f'''
                 INSERT INTO Watchdog (ts, note, tipologiaEventiId, utenteId)
-                VALUES ({log.ts}, "{parsed_query}", {c.lastrowid}, {log.author})
+                VALUES ({log.ts}, "{parsed_query}", {c.lastrowid if len(te_id) == 0 else te_id[0][0]}, {log.author})
             ''')
 
             conn.commit()

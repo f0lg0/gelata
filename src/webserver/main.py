@@ -9,14 +9,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # database
-from database_generator import generate_database  # type: ignore
-from database_ops import dbops_init  # type: ignore
+from database_generator import generate_database
+from database_ops import dbops_init
 
 from datetime import timedelta
 from flask import Flask, session, render_template
-from user_session import authorization  # type: ignore
-from login_required import login_required  # type: ignore
-from interventi import interventi_handler  # type: ignore
+from user_session import authorization
+from login_required import login_required
+from interventi import interventi_handler
 
 app = Flask(__name__, static_url_path="", static_folder="web/static",
             template_folder="web/templates")

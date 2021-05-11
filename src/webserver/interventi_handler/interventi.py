@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, render_template, request, redirect
-from login_required import login_required  # type: ignore
+from login_required import login_required
 
 interventi_handler = Blueprint("interventi_handler", __name__)
 

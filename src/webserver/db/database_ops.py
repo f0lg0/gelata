@@ -16,7 +16,7 @@ così si sfruttano i metodi e le precauzioni di locking che adotta sqlite3 in ma
 '''
 
 import sqlite3
-from watchdog import Watchdog  # type: ignore
+from watchdog import Watchdog
 
 DB_PATH = None
 wd = None

@@ -41,6 +41,7 @@ def authorize():
 def logout():
     for key in list(session.keys()):
         session.pop(key)
+
     return redirect("/")
 
 
