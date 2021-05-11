@@ -16,7 +16,7 @@ così si sfruttano i metodi e le precauzioni di locking che adotta sqlite3 in ma
 '''
 
 import sqlite3
-from watchdog import Watchdog
+from watchdog import Watchdog  # type: ignore
 
 DB_PATH = None
 wd = None
@@ -51,15 +51,15 @@ def dbops_user_signup(user):
         # prima volta che incontriamo questo utente
         profilo_query = f'''
             INSERT INTO Profilo (descrizione, enabled)
-            VALUES ("???", 1)
+            VALUES ("collaboratore", 1)
         '''
         c.execute(profilo_query)
 
         profilo_id = c.lastrowid
 
         utente_query = f'''
-            INSERT INTO Utente (username, qualifica, profiloId, enabled)
-            VALUES ("{user['email']}", "???", {profilo_id}, 1)
+            INSERT INTO Utente (username, qualifica, enabled)
+            VALUES ("{user['email']}", {profilo_id}, 1)
         '''
         c.execute(utente_query)
 
