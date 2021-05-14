@@ -16,6 +16,7 @@ così si sfruttano i metodi e le precauzioni di locking che adotta sqlite3 in ma
 '''
 
 import sqlite3
+import time
 from watchdog import Watchdog
 
 DB_PATH = None
@@ -86,7 +87,7 @@ def dbops_user_signup(user):
     }
 
 
-def dbops_save_intervento(data):
+def dbops_save_intervento(data, user_email):
     '''
     data {
         timestamp
@@ -129,6 +130,115 @@ def dbops_save_intervento(data):
             "success": False,
             "message": "L'intervento è nullo"
         }
+
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+
+        # TODO: sanitazation
+
+        # sede
+        c.execute(f'''
+            INSERT INTO Sede (descrizione, enabled)
+            VALUES ("{data['sede']['descrizione']}", 1)
+        ''')
+
+        sede_id = c.lastrowid
+
+        # plesso
+        c.execute(f'''
+            INSERT INTO Plesso (descrizione, enabled)
+            VALUES ("{data['plesso']['descrizione']}", 1)
+        ''')
+
+        plesso_id = c.lastrowid
+
+        # frequenza
+        c.execute(f'''
+            INSERT INTO Frequenza (descrizione, enabled)
+            VALUES ("{data['attività']['frequenza']['descrizione']}", 1)
+        ''')
+
+        # attività
+        c.execute(f'''
+            INSERT INTO Attività (descrizione, frequenzaId, enabled)
+            VALUES ("{data['attività']['descrizione']}", {c.lastrowid}, 1)
+        ''')
+
+        attività_id = c.lastrowid
+
+        # intervento
+        intervento_mutation = f'''
+            INSERT INTO Intervento (ts, note, sedeId, plessoId, attivitàId, enabled)
+            VALUES ({time.time()}, "{data['note']}", {sede_id}, {plesso_id}, {attività_id}, 1)
+        '''
+
+        c.execute(intervento_mutation)
+
+        intervento_id = c.lastrowid
+
+        # vano
+        c.execute(f'''
+            INSERT INTO Vano (codice, descrizione, enabled)
+            VALUES ("{data['vano']['codice']}", "{data['vano']['descrizione']}", 1)
+        ''')
+
+        vano_id = c.lastrowid
+
+        # relazione tra vano e intervento
+        c.execute(f'''
+            INSERT INTO Stanza (vanoId, interventoId, enabled)
+            VALUES ({vano_id}, {intervento_id}, 1)
+        ''')
+
+        # prodotto
+        c.execute(f'''
+            INSERT INTO Prodotto (descrizione, enabled)
+            VALUES ("{data['prodotto']['descrizione']}", 1)
+        ''')
+
+        prodotto_id = c.lastrowid
+
+        # relazione tra intervento e prodotto
+        c.execute(f'''
+            INSERT INTO Consuma (prodottoId, interventoId, enabled)
+            VALUES ({prodotto_id}, {intervento_id}, 1)
+        ''')
+
+        # attrezzatura
+        c.execute(f'''
+            INSERT INTO Attrezzatura (descrizione, enabled)
+            VALUES ("{data['attrezzatura']['descrizione']}", 1)
+        ''')
+
+        attrezzatura_id = c.lastrowid
+
+        # relazione tra attrezzatura e intervento
+        c.execute(f'''
+            INSERT INTO Utilizza (attrezzaturaId, interventoId, enabled)
+            VALUES ({attrezzatura_id}, {intervento_id}, 1)
+        ''')
+
+        conn.commit()
+    except Exception as e:
+        print(e)
+
+        return {
+            "success": False,
+            "message": "Internal error."
+        }
+
+    # get user id from email for logging
+    user = c.execute(f'''
+        SELECT id FROM Utente WHERE username = "{user_email}"
+    ''')
+
+    user_id = user.fetchall()[0][0]
+
+    conn.close()
+
+    wd.log(user_id, "Inserimento intervento",
+           intervento_mutation)
 
     return {
         "success": True,
