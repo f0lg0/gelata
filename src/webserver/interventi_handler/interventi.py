@@ -10,7 +10,7 @@ interventi_handler = Blueprint("interventi_handler", __name__)
 
 @interventi_handler.route("/carica", methods=["GET", "POST"])
 @login_required
-def serve_tickets_page():
+def upload_interventi():
     if request.method == "GET":
         return render_template("carica.html")
     if request.method == "POST":

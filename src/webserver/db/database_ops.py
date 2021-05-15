@@ -244,3 +244,7 @@ def dbops_save_intervento(data, user_email):
         "success": True,
         "message": "Intervento caricato con successo"
     }
+
+
+def dbops_delete_intervento(intervento_id):
+    pass
