@@ -79,3 +79,13 @@ python main.py
 ## Running it another day
 
 If you need to work on this project after setting up everything you just need to **activate the virtualenv** and **run the main script**.
+
+## Contributors
+
+@battiu
+
+@Computerino11
+
+@dayane1406
+
+@zFabietto2003
