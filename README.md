@@ -2,6 +2,10 @@
 
 Gestore delle attività ATA
 
+## WARNING
+
+This project is currently under development and it has not reached production yet
+
 ## Requirements
 
 -   python
