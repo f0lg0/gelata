@@ -22,6 +22,17 @@ from watchdog import Watchdog
 DB_PATH = None
 wd = None
 
+# utils
+
+
+def get_user_id_from_mail(c, email):
+    user = c.execute(f'''
+        SELECT id FROM Utente WHERE username = "{email}"
+    ''')
+
+    user_id = user.fetchall()[0][0]
+    return user_id
+
 
 def dbops_init(path):
     global DB_PATH
@@ -228,12 +239,7 @@ def dbops_save_intervento(data, user_email):
             "message": "Internal error."
         }
 
-    # get user id from email for logging
-    user = c.execute(f'''
-        SELECT id FROM Utente WHERE username = "{user_email}"
-    ''')
-
-    user_id = user.fetchall()[0][0]
+    user_id = get_user_id_from_mail(c, user_email)
 
     conn.close()
 
@@ -248,3 +254,149 @@ def dbops_save_intervento(data, user_email):
 
 def dbops_delete_intervento(intervento_id):
     pass
+
+
+def dbops_update_intervento(data, user_email):
+    '''
+    NOTE: 
+    non sapevo come gestire questa operazione in maniera efficiente
+    se fosse stato un db NoSQL avrei usato dei loops ma in questo caso non saprei
+    di conseguenza vengono modificati TUTTI i fields ogni volta anche se  si cambia un solo campo
+    '''
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+
+        # get intervento from id
+        intervento_id = data["id"]
+        intervento = c.execute(f'''
+            SELECT * FROM Intervento WHERE id = {intervento_id}
+        ''')
+
+        intervento = intervento.fetchall()
+
+        # NOTE: add more error checking even tho everything should be fine after finding an intervento
+        if len(intervento):
+            intervento = intervento[0]
+
+            fks = {
+                "sedeId": intervento[3],
+                "plessoId": intervento[4],
+                "attivitàId": intervento[5]
+            }
+
+            # sede
+            c.execute(f'''
+                UPDATE Sede
+                SET descrizione = "{data['sede']['descrizione']}"
+                WHERE id = {fks['sedeId']}
+            ''')
+
+            # plesso
+            c.execute(f'''
+                UPDATE Plesso
+                SET descrizione = "{data['plesso']['descrizione']}"
+                WHERE id = {fks['plessoId']}
+            ''')
+
+            # get frequenza id from attività
+
+            attività = c.execute(f'''
+                SELECT * FROM Attività WHERE id = {fks['attivitàId']}
+            ''')
+
+            attività = attività.fetchall()[0]
+            frequenza_id = attività[2]
+
+            # frequenza
+            c.execute(f'''
+                UPDATE Frequenza
+                SET descrizione = "{data['attività']['frequenza']['descrizione']}"
+                WHERE id = {frequenza_id}
+            ''')
+
+            # attività
+            c.execute(f'''
+                UPDATE Attività
+                SET descrizione = "{data['attività']['descrizione']}"
+                WHERE id = {fks['attivitàId']}
+            ''')
+
+            # intervento
+            c.execute(f'''
+                UPDATE Intervento
+                SET note = "{data['note']}"
+                WHERE id = {intervento_id}
+            ''')
+
+            # get vano id from Stanza using intervento id
+            vano_id = c.execute(f'''
+                SELECT vanoId FROM Stanza 
+                WHERE interventoId = {intervento_id}
+            ''')
+
+            vano_id = vano_id.fetchall()[0][0]
+
+            # vano
+            c.execute(f'''
+                UPDATE Vano
+                SET codice = "{data['vano']['codice']}", 
+                descrizione = "{data['vano']['descrizione']}"
+                WHERE id = {vano_id}
+            ''')
+
+            # get prodottoId from Consuma using interventoId
+            prodotto_id = c.execute(f'''
+                SELECT prodottoId FROM Consuma 
+                WHERE interventoId = {intervento_id}
+            ''')
+
+            prodotto_id = prodotto_id.fetchall()[0][0]
+
+            # prodotto
+            c.execute(f'''
+                UPDATE Prodotto
+                SET descrizione = "{data['prodotto']['descrizione']}"
+                WHERE id = {prodotto_id}
+            ''')
+
+            # get attrezzaturaId from Utilizza using interventoId
+            attrezzatura_id = c.execute(f'''
+                SELECT attrezzaturaId from Utilizza
+                WHERE interventoId = {intervento_id}
+            ''')
+
+            attrezzatura_id = attrezzatura_id.fetchall()[0][0]
+
+            # attrezzatura
+            c.execute(f'''
+                UPDATE Attrezzatura
+                SET descrizione = "{data['attrezzatura']['descrizione']}"
+                WHERE id = {attrezzatura_id}
+            ''')
+
+            conn.commit()
+
+        else:
+            return {
+                "success": False,
+                "message": "Impossibile trovare l'intervento"
+            }
+    except Exception as e:
+        print(f"Error while connecting to sqlite database: {e}")
+        return {
+            "success": False,
+            "message": "Errore interno"
+        }
+
+    user_id = get_user_id_from_mail(c, user_email)
+
+    conn.close()
+
+    wd.log(user_id, "Modifica intervento",
+           f"(NOTE: redacted) UPDATE Intervento WHERE id = {intervento_id}")
+
+    return {
+        "success": True,
+        "message": "Modifica dell'intervento avvenuta con successo"
+    }
