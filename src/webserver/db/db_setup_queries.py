@@ -112,6 +112,7 @@ setup_queries = [
                 sedeId INTEGER REFERENCES Sede(id),
                 plessoId INTEGER REFERENCES Plesso(id),
                 attivitàId INTEGER REFERENCES Attività(id),
+                utenteId INTEGER REFERENCES Utente(id),
                 enabled BOOL
             )
         '''

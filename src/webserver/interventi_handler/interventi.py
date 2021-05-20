@@ -49,7 +49,7 @@ def upload_intervento():
 @login_required
 def update_intervento():
     data = {
-        "id": 11,
+        "id": 1,
         "note": "nuove note",
         "sede": {
             "descrizione": "nuova descrizione sede",

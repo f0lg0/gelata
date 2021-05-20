@@ -98,6 +98,7 @@ def dbops_user_signup(user):
     }
 
 
+# INSERIMENTO INTERVENTI
 def dbops_save_intervento(data, user_email):
     '''
     data {
@@ -146,6 +147,8 @@ def dbops_save_intervento(data, user_email):
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
 
+        user_id = get_user_id_from_mail(c, user_email)
+
         # TODO: sanitazation
 
         # sede
@@ -180,8 +183,8 @@ def dbops_save_intervento(data, user_email):
 
         # intervento
         intervento_mutation = f'''
-            INSERT INTO Intervento (ts, note, sedeId, plessoId, attivitàId, enabled)
-            VALUES ({time.time()}, "{data['note']}", {sede_id}, {plesso_id}, {attività_id}, 1)
+            INSERT INTO Intervento (ts, note, sedeId, plessoId, attivitàId, utenteId, enabled)
+            VALUES ({time.time()}, "{data['note']}", {sede_id}, {plesso_id}, {attività_id}, {user_id}, 1)
         '''
 
         c.execute(intervento_mutation)
@@ -239,8 +242,6 @@ def dbops_save_intervento(data, user_email):
             "message": "Internal error."
         }
 
-    user_id = get_user_id_from_mail(c, user_email)
-
     conn.close()
 
     wd.log(user_id, "Inserimento intervento",
@@ -252,10 +253,12 @@ def dbops_save_intervento(data, user_email):
     }
 
 
+# ELIMINAZIONE INTERVENTI
 def dbops_delete_intervento(intervento_id):
     pass
 
 
+# MODIFICA DI INTERVENTI GIA' ESISTENTI
 def dbops_update_intervento(data, user_email):
     '''
     NOTE: 
@@ -267,10 +270,13 @@ def dbops_update_intervento(data, user_email):
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
 
+        user_id = get_user_id_from_mail(c, user_email)
+
+        # ? TODO: analizzare la sicurezza di questa operazione, ID utente e ID intervento unici identificatori per modificare un intervento
         # get intervento from id
         intervento_id = data["id"]
         intervento = c.execute(f'''
-            SELECT * FROM Intervento WHERE id = {intervento_id}
+            SELECT * FROM Intervento WHERE id = {intervento_id} AND utenteId = {user_id};
         ''')
 
         intervento = intervento.fetchall()
@@ -389,8 +395,6 @@ def dbops_update_intervento(data, user_email):
             "message": "Errore interno"
         }
 
-    user_id = get_user_id_from_mail(c, user_email)
-
     conn.close()
 
     wd.log(user_id, "Modifica intervento",
@@ -400,3 +404,38 @@ def dbops_update_intervento(data, user_email):
         "success": True,
         "message": "Modifica dell'intervento avvenuta con successo"
     }
+
+
+# OTTIENI INTERVENTI DA VISUALIZZARE NELLA DASHBOARD
+def dbops_get_interventi_by_user(user_email, offset):
+    pass
+    # try:
+    #     conn = sqlite3.connect(DB_PATH)
+    #     c = conn.cursor()
+
+    #     user_id = get_user_id_from_mail(c, user_email)
+
+    #     interventi = c.execute(f'''
+    #         SELECT * FROM Intervento WHERE
+    #     ''')
+
+    #     conn.commit()
+    # except Exception as e:
+    #     print(f"Error while connecting to sqlite database: {e}")
+    #     return {
+    #         "success": False,
+    #         "get_interventi": False,
+    #         "message": "Errore interno"
+    #     }
+
+    # conn.close()
+
+    # # wd.log(user_id, "Creazione profilo dell'utente", profilo_query)
+    # # wd.log(user_id, "Inserimento dettagli utente in tabella Utente", utente_query)
+
+    # return {
+    #     "success": True,
+    #     "get_interventi": True,
+    #     "message": "Ottenuto lista di interventi con successo",
+    #     "interventi": []
+    # }
