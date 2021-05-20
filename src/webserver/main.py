@@ -17,6 +17,7 @@ from flask import Flask, session, render_template
 from user_session import authorization
 from login_required import login_required
 from interventi import interventi_handler
+from database_ops import dbops_get_interventi_by_user
 
 app = Flask(__name__, static_url_path="", static_folder="web/static",
             template_folder="web/templates")
@@ -33,7 +34,10 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
 @login_required
 def home():
     print("*** DEBUG:", dict(session))
-    return render_template("home.html", user=dict(session)['profile'], tickets=16)
+
+    # retreive first 10 entries
+    res = dbops_get_interventi_by_user(session["profile"]["email"])
+    return render_template("home.html", user=dict(session)['profile'], interventi=res["interventi"])
 
 
 def main():

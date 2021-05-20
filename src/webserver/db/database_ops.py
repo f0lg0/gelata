@@ -407,35 +407,38 @@ def dbops_update_intervento(data, user_email):
 
 
 # OTTIENI INTERVENTI DA VISUALIZZARE NELLA DASHBOARD
-def dbops_get_interventi_by_user(user_email, offset):
-    pass
-    # try:
-    #     conn = sqlite3.connect(DB_PATH)
-    #     c = conn.cursor()
+def dbops_get_interventi_by_user(user_email, offset=0):
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
 
-    #     user_id = get_user_id_from_mail(c, user_email)
+        user_id = get_user_id_from_mail(c, user_email)
 
-    #     interventi = c.execute(f'''
-    #         SELECT * FROM Intervento WHERE
-    #     ''')
+        interventi = c.execute(f'''
+            SELECT * FROM Intervento
+            WHERE utenteId = {user_id}
+            ORDER BY id
+            LIMIT 10
+            OFFSET {offset}
+        ''')
 
-    #     conn.commit()
-    # except Exception as e:
-    #     print(f"Error while connecting to sqlite database: {e}")
-    #     return {
-    #         "success": False,
-    #         "get_interventi": False,
-    #         "message": "Errore interno"
-    #     }
+        interventi = interventi.fetchall()
+    except Exception as e:
+        print(f"Error while connecting to sqlite database: {e}")
+        return {
+            "success": False,
+            "get_interventi": False,
+            "message": "Errore interno"
+        }
 
-    # conn.close()
+    conn.close()
 
-    # # wd.log(user_id, "Creazione profilo dell'utente", profilo_query)
-    # # wd.log(user_id, "Inserimento dettagli utente in tabella Utente", utente_query)
+    # wd.log(user_id, "Creazione profilo dell'utente", profilo_query)
+    # wd.log(user_id, "Inserimento dettagli utente in tabella Utente", utente_query)
 
-    # return {
-    #     "success": True,
-    #     "get_interventi": True,
-    #     "message": "Ottenuto lista di interventi con successo",
-    #     "interventi": []
-    # }
+    return {
+        "success": True,
+        "get_interventi": True,
+        "message": "Ottenuto lista di interventi con successo",
+        "interventi": interventi
+    }
