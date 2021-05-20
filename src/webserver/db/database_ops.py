@@ -414,13 +414,14 @@ def dbops_get_interventi_by_user(user_email, offset=0):
 
         user_id = get_user_id_from_mail(c, user_email)
 
-        interventi = c.execute(f'''
+        query = f'''
             SELECT * FROM Intervento
             WHERE utenteId = {user_id}
             ORDER BY id
             LIMIT 10
             OFFSET {offset}
-        ''')
+        '''
+        interventi = c.execute(query)
 
         interventi = interventi.fetchall()
     except Exception as e:
@@ -433,8 +434,7 @@ def dbops_get_interventi_by_user(user_email, offset=0):
 
     conn.close()
 
-    # wd.log(user_id, "Creazione profilo dell'utente", profilo_query)
-    # wd.log(user_id, "Inserimento dettagli utente in tabella Utente", utente_query)
+    wd.log(user_id, "Fetching itnerventi svolti dall' utente", query)
 
     return {
         "success": True,
