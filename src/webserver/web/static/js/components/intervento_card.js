@@ -5,13 +5,13 @@ template.innerHTML = `
             margin: 0;
             padding: 0;
         }
-        .ticket_card {
+        .intervento_card {
             max-width: 400px;
             width: 100%;
             user-select: none;
         }
         
-        .ticket_card .top {
+        .intervento_card .top {
             background-color: #272732;
             width: 100%;
             height: 60px;
@@ -21,8 +21,8 @@ template.innerHTML = `
             flex-direction: row;
         }
         
-        .ticket_card .center,
-        .ticket_card .bottom {
+        .intervento_card .center,
+        .intervento_card .bottom {
             background-color: #21212b;
         }
         
@@ -51,25 +51,25 @@ template.innerHTML = `
             font-weight: bold;
         }
         
-        .ticket_card .center .container {
+        .intervento_card .center .container {
             display: flex;
             flex-direction: row;
             height: 70px;
         }
         
-        .ticket_card .center .container .text, .ticket_card .center .container .text ::slotted(p) {
+        .intervento_card .center .container .text, .intervento_card .center .container .text ::slotted(p) {
             font-size: 16px;
             font-weight: 300;
         }
         
-        .ticket_card .center .container .icon {
+        .intervento_card .center .container .icon {
             background-color: transparent;
             border: 2px solid purple;
             width: 25px;
             height: 25px;
         }
         
-        .ticket_card .bottom {
+        .intervento_card .bottom {
             width: 100%;
             height: 50px;
             border-radius: 0 0 12px 12px;
@@ -82,11 +82,11 @@ template.innerHTML = `
             cursor: pointer;
         }
         
-        .ticket_card .bottom p, .ticket_card .bottom::slotted(p) {
+        .intervento_card .bottom p, .intervento_card .bottom::slotted(p) {
             margin-top: 10px;
         }
     </style>
-    <div class="ticket_card">
+    <div class="intervento_card">
         <div class="top">
             <div class="icon_wrapper">
                 <div class="icon"></div>
@@ -133,7 +133,7 @@ template.innerHTML = `
     </div>
 `;
 
-export class TicketCard extends HTMLElement {
+export class InterventoCard extends HTMLElement {
     constructor() {
         super();
         const shadowRoot = this.attachShadow({ mode: "open" });
@@ -142,4 +142,4 @@ export class TicketCard extends HTMLElement {
     }
 }
 
-window.customElements.define("ticket-card", TicketCard);
+window.customElements.define("intervento-card", InterventoCard);

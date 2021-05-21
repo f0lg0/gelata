@@ -11,11 +11,11 @@ template.innerHTML = `
             flex-direction: row;
         }
 
-        .left {
+        .nav_left {
             width: calc(100% - 235px);
         }
 
-        .home {
+        .nav_home {
             width: 200px;
             height: 100%;
 
@@ -26,7 +26,7 @@ template.innerHTML = `
             cursor: pointer;
         }
 
-        .icon {
+        .nav_icon {
             width: 20%;
             height: 100%;
 
@@ -34,11 +34,11 @@ template.innerHTML = `
             align-items: center;
         }
 
-        .icon svg {
+        .nav_icon svg {
             margin: auto;
         }
 
-        .home p {
+        .nav_home p {
             margin: auto;
             margin-left: 10px;
 
@@ -46,7 +46,7 @@ template.innerHTML = `
             font-size: 20px;
         }
 
-        .right {
+        .nav_right {
             width: 235px;
 
             display: flex;
@@ -109,18 +109,18 @@ template.innerHTML = `
                 display: none;
             }
 
-            .left {
+            .nav_left {
                 width: 80%;
             }
-            .right {
+            .nav_right {
                 width: 20%;
             }
         }
     </style>
     <div id="navbar">
-        <div class="left">
-            <div class="home" onclick="routeHome()">
-                <div class="icon">
+        <div class="nav_left">
+            <div class="nav_home" onclick="routeHome()">
+                <div class="nav_icon">
                     <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M27.7083 5.83331H7.29165C6.48623 5.83331 5.83331 6.48623 5.83331 7.29165V10.2083C5.83331 11.0137 6.48623 11.6666 7.29165 11.6666H27.7083C28.5137 11.6666 29.1666 11.0137 29.1666 10.2083V7.29165C29.1666 6.48623 28.5137 5.83331 27.7083 5.83331Z" fill="white" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M13.125 17.5H7.29165C6.48623 17.5 5.83331 18.1529 5.83331 18.9583V27.7083C5.83331 28.5137 6.48623 29.1667 7.29165 29.1667H13.125C13.9304 29.1667 14.5833 28.5137 14.5833 27.7083V18.9583C14.5833 18.1529 13.9304 17.5 13.125 17.5Z" fill="white" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
@@ -132,7 +132,7 @@ template.innerHTML = `
                 <p>Dashboard</p>
             </div>
         </div>
-        <div class="right">
+        <div class="nav_right">
             <div class="logout_btn_container">
                 <div class="logout_btn" onclick="logout()">
                     <p>Logout</p>

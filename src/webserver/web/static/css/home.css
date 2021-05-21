@@ -58,18 +58,18 @@ body {
     margin-bottom: 50px;
 }
 
-.tickets_feed {
+.interventi_feed {
     width: 70%;
     height: 60%;
     margin: auto;
     scroll-behavior: smooth;
 }
 
-.tickets_feed::-webkit-scrollbar {
+.interventi_feed::-webkit-scrollbar {
     display: none;
 }
 
-.tickets_container {
+.interventi_container {
     width: 80%;
     margin: auto;
 

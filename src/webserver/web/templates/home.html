@@ -11,7 +11,7 @@
     </head>
 
     <body>
-        <script type="module" src="/js/components/ticket_card.js"></script>
+        <script type="module" src="/js/components/intervento_card.js"></script>
         <script type="module" src="/js/components/navbar.js"></script>
         <script type="module" src="/js/set_profile_pic.js"></script>
 
@@ -27,14 +27,14 @@
                     </div>
                 </div>
 
-                <div class="tickets_feed">
-                    <div class="tickets_container">
+                <div class="interventi_feed">
+                    <div class="interventi_container">
                         {% for i in interventi %}
-                        <ticket-card class="card_wrapper">
+                        <intervento-card class="card_wrapper">
                             <p slot="titolo">{{ i[0] }}</p>
                             <p slot="campo_0">{{ i[1] }}</p>
                             <p slot="campo_1">{{ i[2] }}</p>
-                        </ticket-card>
+                        </intervento-card>
                         {% endfor %}
                     </div>
                 </div>
