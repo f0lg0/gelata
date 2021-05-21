@@ -424,6 +424,8 @@ def dbops_get_interventi_by_user(user_email, offset=0):
         interventi = c.execute(query)
 
         interventi = interventi.fetchall()
+
+        # TODO: fetch the remaining data (FKs)
     except Exception as e:
         print(f"Error while connecting to sqlite database: {e}")
         return {
@@ -434,7 +436,7 @@ def dbops_get_interventi_by_user(user_email, offset=0):
 
     conn.close()
 
-    wd.log(user_id, "Fetching itnerventi svolti dall' utente", query)
+    wd.log(user_id, "Fetching interventi svolti dall' utente", query)
 
     return {
         "success": True,

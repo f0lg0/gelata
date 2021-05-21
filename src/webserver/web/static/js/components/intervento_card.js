@@ -19,6 +19,22 @@ template.innerHTML = `
         
             display: flex;
             flex-direction: row;
+            align-items: center;
+        }
+
+        .top .intervento_p {
+            flex: 0.2;
+
+            margin-right: 15px;
+            font-size: 20px;
+            font-weight: bold;
+
+            margin-left: 25px;
+        }
+
+        .top .dynamic_intervento_title {
+            flex: 0.8;
+            text-align: left;
         }
         
         .intervento_card .center,
@@ -29,24 +45,35 @@ template.innerHTML = `
         .icon_wrapper {
             width: 20%;
             height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .icon {
-            width: 30px;
-            height: 30px;
+        .nav_icon {
+            width: 25px;
+            height: 25px;
             border-radius: 10px;
-            background-color: #df2e59;
             margin: auto;
             margin-top: 15px;
+            background-color: transparent;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav_icon svg {
+            width: 100%;
+            height: 100%;
         }
         
         .text {
             width: 80%;
-            height: 100%;
             margin-top: 18px;
         }
         
-        .top .text p, .top .text ::slotted(p) {
+        .top p ::slotted(p) {
             font-size: 20px;
             font-weight: bold;
         }
@@ -62,12 +89,6 @@ template.innerHTML = `
             font-weight: 300;
         }
         
-        .intervento_card .center .container .icon {
-            background-color: transparent;
-            border: 2px solid purple;
-            width: 25px;
-            height: 25px;
-        }
         
         .intervento_card .bottom {
             width: 100%;
@@ -88,32 +109,99 @@ template.innerHTML = `
     </style>
     <div class="intervento_card">
         <div class="top">
-            <div class="icon_wrapper">
-                <div class="icon"></div>
+            <div class="intervento_p">
+                <p>Intervento: </p>
             </div>
-            <div class="text">
+            <div class="dynamic_intervento_title">
                 <slot name="titolo">
-                    <p>Titolo</p>
+                    <p>lorem  ipsum</p>
                 </slot>
             </div>
         </div>
         <div class="center">
             <div class="container">
                 <div class="icon_wrapper">
-                    <div class="icon"></div>
+                    <div class="nav_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <circle cx="12" cy="12" r="9" />
+                            <polyline points="12 7 12 12 15 15" />
+                        </svg>
+                    </div>
                 </div>
                 <div class="text">
-                    <slot name="campo_0">
+                    <slot name="data">
                         <p>lorem ipsum</p>
                     </slot>
                 </div>
             </div>
             <div class="container">
                 <div class="icon_wrapper">
-                    <div class="icon"></div>
+                    <div class="nav_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-notes" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <rect x="5" y="3" width="14" height="18" rx="2" />
+                            <line x1="9" y1="7" x2="15" y2="7" />
+                            <line x1="9" y1="11" x2="15" y2="11" />
+                            <line x1="9" y1="15" x2="13" y2="15" />
+                        </svg>
+                    </div>
                 </div>
                 <div class="text">
-                    <slot name="campo_1">
+                    <slot name="note">
+                        <p>lorem ipsum</p>
+                    </slot>
+                </div>
+            </div>
+            <div class="container">
+                <div class="icon_wrapper">
+                    <div class="nav_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-cottage" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <line x1="3" y1="21" x2="21" y2="21" />
+                            <path d="M4 21v-11l2.5 -4.5l5.5 -2.5l5.5 2.5l2.5 4.5v11" />
+                            <circle cx="12" cy="9" r="2" />
+                            <path d="M9 21v-5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v5" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="text">
+                    <slot name="sede">
+                        <p>lorem ipsum</p>
+                    </slot>
+                </div>
+            </div>
+            <div class="container">
+                <div class="icon_wrapper">
+                    <div class="nav_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-subtask" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <line x1="6" y1="9" x2="12" y2="9" />
+                            <line x1="4" y1="5" x2="8" y2="5" />
+                            <path d="M6 5v11a1 1 0 0 0 1 1h5" />
+                            <rect x="12" y="7" width="8" height="4" rx="1" />
+                            <rect x="12" y="15" width="8" height="4" rx="1" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="text">
+                    <slot name="att">
+                        <p>lorem ipsum</p>
+                    </slot>
+                </div>
+            </div>
+            <div class="container">
+                <div class="icon_wrapper">
+                    <div class="nav_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <circle cx="12" cy="7" r="4" />
+                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="text">
+                    <slot name="utente">
                         <p>lorem ipsum</p>
                     </slot>
                 </div>

@@ -32,8 +32,11 @@
                         {% for i in interventi %}
                         <intervento-card class="card_wrapper">
                             <p slot="titolo">{{ i[0] }}</p>
-                            <p slot="campo_0">{{ i[1] }}</p>
-                            <p slot="campo_1">{{ i[2] }}</p>
+                            <p slot="data">{{ i[1] }}</p>
+                            <p slot="note">{{ i[2] }}</p>
+                            <p slot="sede">{{ i[3] }}</p>
+                            <p slot="att">{{ i[5] }}</p>
+                            <p slot="utente">{{ i[6] }}</p>
                         </intervento-card>
                         {% endfor %}
                     </div>
