@@ -29,14 +29,15 @@
 
                 <div class="interventi_feed">
                     <div class="interventi_container">
+                        <!-- Add other fields -->
                         {% for i in interventi %}
                         <intervento-card class="card_wrapper">
-                            <p slot="titolo">{{ i[0] }}</p>
-                            <p slot="data">{{ i[1] }}</p>
-                            <p slot="note">{{ i[2] }}</p>
-                            <p slot="sede">{{ i[3] }}</p>
-                            <p slot="att">{{ i[5] }}</p>
-                            <p slot="utente">{{ i[6] }}</p>
+                            <p slot="titolo">{{ i.id }}</p>
+                            <p slot="data">{{ i.ts }}</p>
+                            <p slot="note">{{ i.note }}</p>
+                            <p slot="sede">{{ i.sede }}</p>
+                            <p slot="att">{{ i.attività.descrizione }}</p>
+                            <p slot="utente">{{ i.utente }}</p>
                         </intervento-card>
                         {% endfor %}
                     </div>

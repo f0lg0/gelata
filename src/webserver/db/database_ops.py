@@ -424,8 +424,104 @@ def dbops_get_interventi_by_user(user_email, offset=0):
         interventi = c.execute(query)
 
         interventi = interventi.fetchall()
+        print(interventi)
 
-        # TODO: fetch the remaining data (FKs)
+        parsed = []
+        for i in interventi:
+            # sede
+            sede = c.execute(f'''
+                SELECT descrizione FROM Sede
+                WHERE id = {i[3]}
+            ''')
+            sede = sede.fetchall()[0][0]
+
+            # plesso
+            plesso = c.execute(f'''
+                SELECT descrizione from Plesso
+                WHERE id = {i[4]}
+            ''')
+            plesso = plesso.fetchall()[0][0]
+
+            # attività
+            attività = c.execute(f'''
+                SELECT descrizione, frequenzaId FROM Attività
+                WHERE id = {i[5]}
+            ''')
+            attività = attività.fetchall()[0]
+            att_desc = attività[0]
+            freq_id = attività[1]
+
+            # frequenza
+            frequenza = c.execute(f'''
+                SELECT descrizione FROM Frequenza
+                WHERE id = {freq_id}
+            ''')
+            frequenza = frequenza.fetchall()[0][0]
+
+            # utente
+            utente = c.execute(f'''
+                SELECT username FROM Utente
+                WHERE id = {i[6]}
+            ''')
+            utente = utente.fetchall()[0][0]
+
+            # vano
+            vano_id = c.execute(f'''
+                SELECT vanoId from Stanza
+                WHERE interventoId = {i[0]}
+            ''')
+            vano_id = vano_id.fetchall()[0][0]
+
+            vano = c.execute(f'''
+                SELECT codice, descrizione FROM Vano
+                WHERE id = {vano_id}
+            ''')
+            vano = vano.fetchall()[0]
+
+            # prodotto
+            prodotto_id = c.execute(f'''
+                SELECT prodottoId FROM Consuma
+                WHERE interventoId = {i[0]}
+            ''')
+            prodotto_id = prodotto_id.fetchall()[0][0]
+
+            prodotto = c.execute(f'''
+                SELECT descrizione FROM Prodotto
+                WHERE id = {prodotto_id}
+            ''')
+            prodotto = prodotto.fetchall()[0][0]
+
+            # attrezzatura
+            attrezzatura_id = c.execute(f'''
+                SELECT attrezzaturaId FROM Utilizza
+                WHERE interventoId = {i[0]}
+            ''')
+            attrezzatura_id = attrezzatura_id.fetchall()[0][0]
+
+            attrezzatura = c.execute(f'''
+                SELECT descrizione FROM Attrezzatura
+                WHERE id = {attrezzatura_id}
+            ''')
+            attrezzatura = attrezzatura.fetchall()[0][0]
+
+            parsed.append({
+                "id": i[0],
+                "ts": i[1],
+                "note": i[2],
+                "sede": sede,
+                "plesso": plesso,
+                "attività": {
+                    "descrizione": att_desc,
+                    "frequenza": frequenza
+                },
+                "utente": utente,
+                "vano": {
+                    "codice": vano[0],
+                    "descrizione": vano[1]
+                },
+                "prodotto": prodotto,
+                "attrezzatura": attrezzatura
+            })
     except Exception as e:
         print(f"Error while connecting to sqlite database: {e}")
         return {
@@ -442,5 +538,5 @@ def dbops_get_interventi_by_user(user_email, offset=0):
         "success": True,
         "get_interventi": True,
         "message": "Ottenuto lista di interventi con successo",
-        "interventi": interventi
+        "interventi": parsed
     }

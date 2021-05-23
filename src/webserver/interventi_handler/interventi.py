@@ -48,6 +48,8 @@ def upload_intervento():
 @interventi_handler.route("/modifica", methods=["POST"])
 @login_required
 def update_intervento():
+    # TODO: this is dummy data, we will eventually use form data
+
     data = {
         "id": 1,
         "note": "nuove note",
