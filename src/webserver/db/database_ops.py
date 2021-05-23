@@ -22,8 +22,6 @@ from watchdog import Watchdog
 DB_PATH = None
 wd = None
 
-# utils
-
 
 def get_user_id_from_mail(c, email):
     user = c.execute(f'''
