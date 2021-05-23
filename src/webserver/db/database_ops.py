@@ -260,6 +260,7 @@ def dbops_delete_intervento(intervento_id):
 
 # MODIFICA DI INTERVENTI GIA' ESISTENTI
 def dbops_update_intervento(data, user_email):
+    # TODO: pulire questa funzione utilizzando JOINs come nella funzione per ottenre gli interventi
     '''
     NOTE: 
     non sapevo come gestire questa operazione in maniera efficiente
@@ -272,7 +273,6 @@ def dbops_update_intervento(data, user_email):
 
         user_id = get_user_id_from_mail(c, user_email)
 
-        # ? TODO: analizzare la sicurezza di questa operazione, ID utente e ID intervento unici identificatori per modificare un intervento
         # get intervento from id
         intervento_id = data["id"]
         intervento = c.execute(f'''
@@ -415,115 +415,56 @@ def dbops_get_interventi_by_user(user_email, offset=0):
         user_id = get_user_id_from_mail(c, user_email)
 
         query = f'''
-            SELECT * FROM Intervento
-            WHERE utenteId = {user_id}
-            ORDER BY id
-            LIMIT 10
-            OFFSET {offset}
+            SELECT
+                Intervento.id, Intervento.ts, Intervento.note,
+                Sede.descrizione, Plesso.descrizione, Attività.descrizione, Frequenza.descrizione, Utente.username,
+                Vano.codice, Vano.descrizione, Prodotto.descrizione, Attrezzatura.descrizione
+            FROM
+                Intervento
+
+            INNER JOIN Sede ON Intervento.sedeId = Sede.id
+            INNER JOIN Plesso ON Intervento.plessoId = Plesso.id
+            INNER JOIN Attività ON Intervento.attivitàId = Attività.id
+            INNER JOIN Frequenza ON Attività.frequenzaId = Frequenza.id
+            INNER JOIN Utente ON Intervento.utenteId = Utente.id
+            INNER JOIN Stanza ON Stanza.interventoId = Intervento.id
+            INNER JOIN Vano ON Vano.id = Stanza.vanoId
+            INNER JOIN Consuma ON Consuma.interventoId = Intervento.id
+            INNER JOIN Prodotto ON Prodotto.id = Consuma.prodottoId
+            INNER JOIN Utilizza ON Utilizza.interventoId = Intervento.id
+            INNER JOIN Attrezzatura ON Attrezzatura.id = Utilizza.attrezzaturaId 
+
+            WHERE
+                Intervento.utenteId = {user_id}
+
         '''
         interventi = c.execute(query)
 
         interventi = interventi.fetchall()
-        print(interventi)
-
         parsed = []
+
         for i in interventi:
-            # sede
-            sede = c.execute(f'''
-                SELECT descrizione FROM Sede
-                WHERE id = {i[3]}
-            ''')
-            sede = sede.fetchall()[0][0]
-
-            # plesso
-            plesso = c.execute(f'''
-                SELECT descrizione from Plesso
-                WHERE id = {i[4]}
-            ''')
-            plesso = plesso.fetchall()[0][0]
-
-            # attività
-            attività = c.execute(f'''
-                SELECT descrizione, frequenzaId FROM Attività
-                WHERE id = {i[5]}
-            ''')
-            attività = attività.fetchall()[0]
-            att_desc = attività[0]
-            freq_id = attività[1]
-
-            # frequenza
-            frequenza = c.execute(f'''
-                SELECT descrizione FROM Frequenza
-                WHERE id = {freq_id}
-            ''')
-            frequenza = frequenza.fetchall()[0][0]
-
-            # utente
-            utente = c.execute(f'''
-                SELECT username FROM Utente
-                WHERE id = {i[6]}
-            ''')
-            utente = utente.fetchall()[0][0]
-
-            # vano
-            vano_id = c.execute(f'''
-                SELECT vanoId from Stanza
-                WHERE interventoId = {i[0]}
-            ''')
-            vano_id = vano_id.fetchall()[0][0]
-
-            vano = c.execute(f'''
-                SELECT codice, descrizione FROM Vano
-                WHERE id = {vano_id}
-            ''')
-            vano = vano.fetchall()[0]
-
-            # prodotto
-            prodotto_id = c.execute(f'''
-                SELECT prodottoId FROM Consuma
-                WHERE interventoId = {i[0]}
-            ''')
-            prodotto_id = prodotto_id.fetchall()[0][0]
-
-            prodotto = c.execute(f'''
-                SELECT descrizione FROM Prodotto
-                WHERE id = {prodotto_id}
-            ''')
-            prodotto = prodotto.fetchall()[0][0]
-
-            # attrezzatura
-            attrezzatura_id = c.execute(f'''
-                SELECT attrezzaturaId FROM Utilizza
-                WHERE interventoId = {i[0]}
-            ''')
-            attrezzatura_id = attrezzatura_id.fetchall()[0][0]
-
-            attrezzatura = c.execute(f'''
-                SELECT descrizione FROM Attrezzatura
-                WHERE id = {attrezzatura_id}
-            ''')
-            attrezzatura = attrezzatura.fetchall()[0][0]
-
             parsed.append({
                 "id": i[0],
                 "ts": i[1],
                 "note": i[2],
-                "sede": sede,
-                "plesso": plesso,
+                "sede": i[3],
+                "plesso": i[4],
                 "attività": {
-                    "descrizione": att_desc,
-                    "frequenza": frequenza
+                    "descrizione": i[5],
+                    "frequenza": i[6]
                 },
-                "utente": utente,
+                "utente": i[7],
                 "vano": {
-                    "codice": vano[0],
-                    "descrizione": vano[1]
+                    "codice": i[8],
+                    "descrizione": i[9]
                 },
-                "prodotto": prodotto,
-                "attrezzatura": attrezzatura
+                "prodotto": i[10],
+                "attrezzatura": i[11]
             })
     except Exception as e:
         print(f"Error while connecting to sqlite database: {e}")
+
         return {
             "success": False,
             "get_interventi": False,
