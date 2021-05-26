@@ -11,6 +11,7 @@ body {
 
 .main_frame {
     max-width: 2000px;
+    min-height: 100vh;
     margin: auto;
 
     display: flex;
