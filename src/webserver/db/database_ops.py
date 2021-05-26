@@ -252,10 +252,75 @@ def dbops_save_intervento(data, user_email):
     }
 
 
-# ELIMINAZIONE INTERVENTI
+# ELIMINAZIONE INTERVENTI, consinste nel settare il valore enabled a 0 
+# TODO
 def dbops_delete_intervento(intervento_id):
-    pass
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
 
+        # da una prima ricerca non ho trovato come fare l'update tramite inner joins, per evitare questo processo
+
+        # intervento
+        c.execute(f'''
+            UPDATE Intervento
+            SET enabled = 0
+            WHERE id = (
+                SELECT id FROM Intervento 
+                WHERE id = {intervento_id}
+            )
+        ''')
+
+        # sede
+        c.execute(f'''
+            UPDATE Sede
+            SET enabled = 0
+            WHERE id = (
+                SELECT sedeId FROM Intervento
+                WHERE id = {intervento_id}
+            )
+        ''')
+
+        # plesso
+        c.execute(f'''
+            UPDATE Plesso
+            SET enabled = 0
+            WHERE id = (
+                SELECT plessoId FROM Intervento
+                WHERE id = {intervento_id}
+            )
+        ''')
+
+        # attività
+        c.execute(f'''
+            UPDATE Attività
+            SET enabled = 0
+            WHERE id = (
+                SELECT attivitàId FROM Intervento
+                WHERE id = {intervento_id}
+            )
+        ''')
+
+        # conn.commit()
+    except Exception as e:
+        print(f"Error while connecting to sqlite database: {e}")
+
+        return {
+            "success": False,
+            "delete": False,
+            "message": "Errore interno"
+        }
+
+    conn.close()
+
+    # wd.log(user_id, "Creazione profilo dell'utente", profilo_query)
+    # wd.log(user_id, "Inserimento dettagli utente in tabella Utente", utente_query)
+
+    return {
+        "success": True,
+        "delete": True,
+        "message": "Intervento eliminato con successo"
+    }
 
 # MODIFICA DI INTERVENTI GIA' ESISTENTI
 def dbops_update_intervento(data, user_email):

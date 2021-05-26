@@ -3,7 +3,7 @@ import time
 from flask import Blueprint, current_app, render_template, request, redirect, session
 from login_required import login_required
 
-from database_ops import dbops_save_intervento, dbops_update_intervento
+from database_ops import dbops_save_intervento, dbops_update_intervento, dbops_delete_intervento
 
 interventi_handler = Blueprint("interventi_handler", __name__)
 
@@ -79,3 +79,12 @@ def update_intervento():
 
     result = dbops_update_intervento(data, session["profile"]["email"])
     return result
+
+
+
+@interventi_handler.route("/elimina", methods=["POST"])
+@login_required
+def delete_intervento():
+    intervento_id = 1
+    return dbops_delete_intervento(intervento_id)
+
