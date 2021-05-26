@@ -17,6 +17,7 @@ così si sfruttano i metodi e le precauzioni di locking che adotta sqlite3 in ma
 
 import sqlite3
 import time
+from datetime import datetime
 from watchdog import Watchdog
 
 DB_PATH = None
@@ -442,9 +443,14 @@ def dbops_get_interventi_by_user(user_email, offset=0):
         parsed = []
 
         for i in interventi:
+            date_from_ts = str(datetime.fromtimestamp(i[1]))
+
+            # removing seconds from date
+            date_from_ts = date_from_ts[:len(date_from_ts) - 10]
+
             parsed.append({
                 "id": i[0],
-                "ts": i[1],
+                "ts": date_from_ts,
                 "note": i[2],
                 "sede": i[3],
                 "plesso": i[4],
