@@ -81,10 +81,8 @@ def update_intervento():
     return result
 
 
-
 @interventi_handler.route("/elimina", methods=["POST"])
 @login_required
-def delete_intervento():
-    intervento_id = 1
-    return dbops_delete_intervento(intervento_id)
-
+def delete_intervento(intervento_id=5):
+    # TODO: remove default value
+    return dbops_delete_intervento(intervento_id, session["profile"]["email"])

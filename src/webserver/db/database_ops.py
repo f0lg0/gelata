@@ -254,7 +254,7 @@ def dbops_save_intervento(data, user_email):
 
 
 # ELIMINAZIONE INTERVENTI, consinste nel settare il valore enabled a 0
-def dbops_delete_intervento(intervento_id):
+def dbops_delete_intervento(intervento_id, user_email):
     try:
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
@@ -471,7 +471,7 @@ def dbops_get_interventi_by_user(user_email, offset=0):
             INNER JOIN Attrezzatura ON Attrezzatura.id = Utilizza.attrezzaturaId 
 
             WHERE
-                Intervento.utenteId = {user_id}
+                Intervento.utenteId = {user_id} AND Intervento.enabled = 1
 
         '''
         interventi = c.execute(query)
