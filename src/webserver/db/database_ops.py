@@ -98,6 +98,7 @@ def dbops_user_signup(user):
 
 
 # INSERIMENTO INTERVENTI
+# TODO: controllare ID multipli per tabelle  come Vano, Sede, Plesso etc
 def dbops_save_intervento(data, user_email):
     '''
     data {
@@ -252,56 +253,26 @@ def dbops_save_intervento(data, user_email):
     }
 
 
-# ELIMINAZIONE INTERVENTI, consinste nel settare il valore enabled a 0 
-# TODO
+# ELIMINAZIONE INTERVENTI, consinste nel settare il valore enabled a 0
 def dbops_delete_intervento(intervento_id):
     try:
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
 
-        # da una prima ricerca non ho trovato come fare l'update tramite inner joins, per evitare questo processo
+        user_id = get_user_id_from_mail(c, user_email)
 
-        # intervento
-        c.execute(f'''
+        query = f'''
             UPDATE Intervento
             SET enabled = 0
             WHERE id = (
                 SELECT id FROM Intervento 
-                WHERE id = {intervento_id}
+                WHERE id = {intervento_id} AND utenteId = {user_id}
             )
-        ''')
+        '''
 
-        # sede
-        c.execute(f'''
-            UPDATE Sede
-            SET enabled = 0
-            WHERE id = (
-                SELECT sedeId FROM Intervento
-                WHERE id = {intervento_id}
-            )
-        ''')
+        c.execute(query)
 
-        # plesso
-        c.execute(f'''
-            UPDATE Plesso
-            SET enabled = 0
-            WHERE id = (
-                SELECT plessoId FROM Intervento
-                WHERE id = {intervento_id}
-            )
-        ''')
-
-        # attività
-        c.execute(f'''
-            UPDATE Attività
-            SET enabled = 0
-            WHERE id = (
-                SELECT attivitàId FROM Intervento
-                WHERE id = {intervento_id}
-            )
-        ''')
-
-        # conn.commit()
+        conn.commit()
     except Exception as e:
         print(f"Error while connecting to sqlite database: {e}")
 
@@ -313,8 +284,7 @@ def dbops_delete_intervento(intervento_id):
 
     conn.close()
 
-    # wd.log(user_id, "Creazione profilo dell'utente", profilo_query)
-    # wd.log(user_id, "Inserimento dettagli utente in tabella Utente", utente_query)
+    wd.log(user_id, "Eliminazione intervento", query)
 
     return {
         "success": True,
@@ -323,6 +293,8 @@ def dbops_delete_intervento(intervento_id):
     }
 
 # MODIFICA DI INTERVENTI GIA' ESISTENTI
+
+
 def dbops_update_intervento(data, user_email):
     # TODO: pulire questa funzione utilizzando JOINs come nella funzione per ottenre gli interventi
     '''
