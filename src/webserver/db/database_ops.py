@@ -1,6 +1,8 @@
 '''
 NOTE
 
+WISH: refactoring in classe
+
 questo modulo è diverso dagli altri relativi al database perchè
 quando si lavora con Flask sorge un problema:
 

@@ -1,0 +1,52 @@
+@startuml Classi
+class DatabaseGenerator {
+    +DB_PATH: str
+    +CREATED: bool
+    +conn: sqlite3
+    +c: sqlite3
+
+    +execute_query()
+    -create_tables()
+    +close_connection()
+}
+
+interface DatabaseOps {
+    +dbops_init()
+    +dbops_user_signup()
+    +dbops_save_intervento()
+    +dbops_delete_intervento()
+    +dbops_update_intervento()
+    +dbops_get_interventi_by_user()
+}
+
+class LogEvent {
+    +author: str
+    +description: str
+    +query: str
+    +ts: float
+}
+
+class Watchdog {
+    +DB_PATH: str
+
+    +log()
+}
+
+interface Interventi {
+    +upload_intervento()
+    +update_intervento()
+    +delete_intervento()
+}
+
+interface LoginRequired {
+    +login_required()
+}
+
+class OAuthWrapper {
+    +oauth: OAuth
+    +google: OAuth
+
+    +get_auth_object()
+}
+
+@enduml
