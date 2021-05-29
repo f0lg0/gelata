@@ -97,7 +97,6 @@ def dbops_user_signup(user):
     }
 
 
-# INSERIMENTO INTERVENTI
 # TODO: controllare ID multipli per tabelle  come Vano, Sede, Plesso etc
 def dbops_save_intervento(data, user_email):
     '''
@@ -253,7 +252,6 @@ def dbops_save_intervento(data, user_email):
     }
 
 
-# ELIMINAZIONE INTERVENTI, consinste nel settare il valore enabled a 0
 def dbops_delete_intervento(intervento_id, user_email):
     try:
         conn = sqlite3.connect(DB_PATH)
@@ -292,11 +290,8 @@ def dbops_delete_intervento(intervento_id, user_email):
         "message": "Intervento eliminato con successo"
     }
 
-# MODIFICA DI INTERVENTI GIA' ESISTENTI
-
 
 def dbops_update_intervento(data, user_email):
-    # TODO: pulire questa funzione utilizzando JOINs come nella funzione per ottenre gli interventi
     '''
     NOTE: 
     non sapevo come gestire questa operazione in maniera efficiente
@@ -312,12 +307,18 @@ def dbops_update_intervento(data, user_email):
         # get intervento from id
         intervento_id = data["id"]
         intervento = c.execute(f'''
-            SELECT * FROM Intervento WHERE id = {intervento_id} AND utenteId = {user_id};
+            SELECT * FROM Intervento 
+            WHERE 
+                id = {intervento_id} 
+            AND 
+                utenteId = {user_id} 
+            AND 
+                enabled = 1;
         ''')
 
         intervento = intervento.fetchall()
 
-        # NOTE: add more error checking even tho everything should be fine after finding an intervento
+        # TODO: add more error checking and enabled checking
         if len(intervento):
             intervento = intervento[0]
 
@@ -442,7 +443,6 @@ def dbops_update_intervento(data, user_email):
     }
 
 
-# OTTIENI INTERVENTI DA VISUALIZZARE NELLA DASHBOARD
 def dbops_get_interventi_by_user(user_email, offset=0):
     try:
         conn = sqlite3.connect(DB_PATH)
