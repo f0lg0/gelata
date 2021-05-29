@@ -151,20 +151,38 @@ def dbops_save_intervento(data, user_email):
         # TODO: sanitazation
 
         # sede
-        c.execute(f'''
-            INSERT INTO Sede (descrizione, enabled)
-            VALUES ("{data['sede']['descrizione']}", 1)
+        sede = c.execute(f'''
+            SELECT id FROM Sede WHERE descrizione = "{data['sede']['descrizione']}"
         ''')
+        sede = sede.fetchall()
+        sede_id = None
 
-        sede_id = c.lastrowid
+        if not len(sede):
+            c.execute(f'''
+                INSERT INTO Sede (descrizione, enabled)
+                VALUES ("{data['sede']['descrizione']}", 1)
+            ''')
+
+            sede_id = c.lastrowid
+        else:
+            sede_id = sede[0][0]
 
         # plesso
-        c.execute(f'''
-            INSERT INTO Plesso (descrizione, enabled)
-            VALUES ("{data['plesso']['descrizione']}", 1)
+        plesso = c.execute(f'''
+            SELECT id FROM Plesso WHERE descrizione = "{data['plesso']['descrizione']}"
         ''')
+        plesso = plesso.fetchall()
+        plesso_id = None
 
-        plesso_id = c.lastrowid
+        if not len(plesso):
+            c.execute(f'''
+                INSERT INTO Plesso (descrizione, enabled)
+                VALUES ("{data['plesso']['descrizione']}", 1)
+            ''')
+
+            plesso_id = c.lastrowid
+        else:
+            plesso_id = plesso[0][0]
 
         # frequenza
         c.execute(f'''
@@ -179,8 +197,6 @@ def dbops_save_intervento(data, user_email):
         ''')
 
         attività_id = c.lastrowid
-
-        # intervento
         intervento_mutation = f'''
             INSERT INTO Intervento (ts, note, sedeId, plessoId, attivitàId, utenteId, enabled)
             VALUES ({time.time()}, "{data['note']}", {sede_id}, {plesso_id}, {attività_id}, {user_id}, 1)
@@ -191,12 +207,21 @@ def dbops_save_intervento(data, user_email):
         intervento_id = c.lastrowid
 
         # vano
-        c.execute(f'''
-            INSERT INTO Vano (codice, descrizione, enabled)
-            VALUES ("{data['vano']['codice']}", "{data['vano']['descrizione']}", 1)
+        vano = c.execute(f'''
+            SELECT id FROM Vano WHERE codice = {data['vano']['codice']}
         ''')
+        vano = vano.fetchall()
+        vano_id = None
 
-        vano_id = c.lastrowid
+        if not len(vano):
+            c.execute(f'''
+                INSERT INTO Vano (codice, descrizione, enabled)
+                VALUES ("{data['vano']['codice']}", "{data['vano']['descrizione']}", 1)
+            ''')
+
+            vano_id = c.lastrowid
+        else:
+            vano_id = vano[0][0]
 
         # relazione tra vano e intervento
         c.execute(f'''
