@@ -49,8 +49,8 @@ def dbops_user_signup(user):
         c = conn.cursor()
 
         query = c.execute(f'''
-            SELECT EXISTS(SELECT 1 FROM Utente WHERE username = "{user['email']}")
-        ''')
+            SELECT EXISTS(SELECT 1 FROM Utente WHERE username = ?)
+        ''', (user['email'], ))
 
         exists = query.fetchall()[0][0]
 
@@ -70,11 +70,15 @@ def dbops_user_signup(user):
 
         profilo_id = c.lastrowid
 
+        # leaving this even tho we use tuples in the query
         utente_query = f'''
             INSERT INTO Utente (username, qualifica, enabled)
             VALUES ("{user['email']}", {profilo_id}, 1)
         '''
-        c.execute(utente_query)
+        c.execute(f'''
+            INSERT INTO Utente (username, qualifica, enabled)
+            VALUES (?, {profilo_id}, 1)
+        ''', (user['email'], ))
 
         user_id = c.lastrowid
 
