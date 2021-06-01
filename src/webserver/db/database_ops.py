@@ -28,8 +28,8 @@ wd = None
 
 def get_user_id_from_mail(c, email):
     user = c.execute(f'''
-        SELECT id FROM Utente WHERE username = "{email}"
-    ''')
+        SELECT id FROM Utente WHERE username = ? 
+    ''', (email, ))
 
     user_id = user.fetchall()[0][0]
     return user_id
@@ -290,6 +290,7 @@ def dbops_delete_intervento(intervento_id, user_email):
 
         user_id = get_user_id_from_mail(c, user_email)
 
+        # leaving this even tho we execute the query using tuples
         query = f'''
             UPDATE Intervento
             SET enabled = 0
@@ -299,7 +300,14 @@ def dbops_delete_intervento(intervento_id, user_email):
             )
         '''
 
-        c.execute(query)
+        c.execute(f'''
+            UPDATE Intervento
+            SET enabled = 0
+            WHERE id = (
+                SELECT id FROM Intervento 
+                WHERE id = ? AND utenteId = {user_id}
+            )
+        ''', (intervento_id, ))
 
         conn.commit()
     except Exception as e:
@@ -323,7 +331,6 @@ def dbops_delete_intervento(intervento_id, user_email):
 
 
 def dbops_update_intervento(data, user_email):
-    # TODO: sanitazation
     '''
     NOTE: 
     non sapevo come gestire questa operazione in maniera efficiente
@@ -341,12 +348,12 @@ def dbops_update_intervento(data, user_email):
         intervento = c.execute(f'''
             SELECT * FROM Intervento 
             WHERE 
-                id = {intervento_id} 
+                id = ? 
             AND 
                 utenteId = {user_id} 
             AND 
                 enabled = 1;
-        ''')
+        ''', (intervento_id, ))
 
         intervento = intervento.fetchall()
 
@@ -363,22 +370,23 @@ def dbops_update_intervento(data, user_email):
             # sede
             c.execute(f'''
                 UPDATE Sede
-                SET descrizione = "{data['sede']['descrizione']}"
-                WHERE id = {fks['sedeId']}
-            ''')
+                SET descrizione = ? 
+                WHERE id = ? 
+            ''', (data['sede']['descrizione'], fks['sedeId']))
 
             # plesso
             c.execute(f'''
                 UPDATE Plesso
-                SET descrizione = "{data['plesso']['descrizione']}"
-                WHERE id = {fks['plessoId']}
-            ''')
+                SET descrizione = ?
+                WHERE id = ?
+            ''', (data['plesso']['descrizione'], fks['plessoId']))
 
             # get frequenza id from attività
 
             attività = c.execute(f'''
-                SELECT * FROM Attività WHERE id = {fks['attivitàId']}
-            ''')
+                SELECT * FROM Attività 
+                WHERE id = ?
+            ''', (fks['attivitàId'], ))
 
             attività = attività.fetchall()[0]
             frequenza_id = attività[2]
@@ -386,69 +394,69 @@ def dbops_update_intervento(data, user_email):
             # frequenza
             c.execute(f'''
                 UPDATE Frequenza
-                SET descrizione = "{data['attività']['frequenza']['descrizione']}"
+                SET descrizione = ? 
                 WHERE id = {frequenza_id}
-            ''')
+            ''', (data['attività']['frequenza']['descrizione'], ))
 
             # attività
             c.execute(f'''
                 UPDATE Attività
-                SET descrizione = "{data['attività']['descrizione']}"
-                WHERE id = {fks['attivitàId']}
-            ''')
+                SET descrizione = ? 
+                WHERE id = ?
+            ''', (data['attività']['descrizione'], fks['attivitàId']))
 
             # intervento
             c.execute(f'''
                 UPDATE Intervento
-                SET note = "{data['note']}"
-                WHERE id = {intervento_id}
-            ''')
+                SET note = ?
+                WHERE id = ?
+            ''', (data['note'], intervento_id))
 
             # get vano id from Stanza using intervento id
             vano_id = c.execute(f'''
                 SELECT vanoId FROM Stanza 
-                WHERE interventoId = {intervento_id}
-            ''')
+                WHERE interventoId = ?
+            ''', (intervento_id, ))
 
             vano_id = vano_id.fetchall()[0][0]
 
             # vano
             c.execute(f'''
                 UPDATE Vano
-                SET codice = "{data['vano']['codice']}", 
-                descrizione = "{data['vano']['descrizione']}"
+                SET codice = ?,  
+                descrizione = ?
                 WHERE id = {vano_id}
-            ''')
+            ''', (data['vano']['codice'], data['vano']['descrizione']))
 
             # get prodottoId from Consuma using interventoId
             prodotto_id = c.execute(f'''
                 SELECT prodottoId FROM Consuma 
-                WHERE interventoId = {intervento_id}
-            ''')
+                WHERE interventoId = ?
+            ''', (intervento_id, ))
 
             prodotto_id = prodotto_id.fetchall()[0][0]
 
             # prodotto
             c.execute(f'''
                 UPDATE Prodotto
-                SET descrizione = "{data['prodotto']['descrizione']}"
+                SET descrizione = ?
                 WHERE id = {prodotto_id}
-            ''')
+            ''', (data['prodotto']['descrizione'], ))
 
             # get attrezzaturaId from Utilizza using interventoId
             attrezzatura_id = c.execute(f'''
                 SELECT attrezzaturaId from Utilizza
-                WHERE interventoId = {intervento_id}
-            ''')
+                WHERE interventoId = ?
+            ''', (intervento_id, ))
 
             attrezzatura_id = attrezzatura_id.fetchall()[0][0]
 
             # attrezzatura
             c.execute(f'''
                 UPDATE Attrezzatura
-                SET descrizione = "{data['attrezzatura']['descrizione']}"
+                SET descrizione = ?
                 WHERE id = {attrezzatura_id}
-            ''')
+            ''', (data['attrezzatura']['descrizione'], ))
 
             conn.commit()
 
