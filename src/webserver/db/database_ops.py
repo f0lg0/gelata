@@ -99,7 +99,6 @@ def dbops_user_signup(user):
     }
 
 
-# TODO: controllare ID multipli per tabelle  come Vano, Sede, Plesso etc
 def dbops_save_intervento(data, user_email):
     '''
     data {
@@ -150,20 +149,19 @@ def dbops_save_intervento(data, user_email):
 
         user_id = get_user_id_from_mail(c, user_email)
 
-        # TODO: sanitazation
-
         # sede
         sede = c.execute(f'''
-            SELECT id FROM Sede WHERE descrizione = "{data['sede']['descrizione']}"
-        ''')
+            SELECT id FROM Sede 
+            WHERE descrizione = ? 
+        ''', (data['sede']['descrizione'], ))
         sede = sede.fetchall()
         sede_id = None
 
         if not len(sede):
             c.execute(f'''
                 INSERT INTO Sede (descrizione, enabled)
-                VALUES ("{data['sede']['descrizione']}", 1)
-            ''')
+                VALUES (?, 1)
+            ''', (data['sede']['descrizione'], ))
 
             sede_id = c.lastrowid
         else:
@@ -171,16 +169,17 @@ def dbops_save_intervento(data, user_email):
 
         # plesso
         plesso = c.execute(f'''
-            SELECT id FROM Plesso WHERE descrizione = "{data['plesso']['descrizione']}"
-        ''')
+            SELECT id FROM Plesso 
+            WHERE descrizione = ? 
+        ''', (data['plesso']['descrizione'], ))
         plesso = plesso.fetchall()
         plesso_id = None
 
         if not len(plesso):
             c.execute(f'''
                 INSERT INTO Plesso (descrizione, enabled)
-                VALUES ("{data['plesso']['descrizione']}", 1)
-            ''')
+                VALUES (?, 1)
+            ''', (data['plesso']['descrizione'], ))
 
             plesso_id = c.lastrowid
         else:
@@ -189,37 +188,42 @@ def dbops_save_intervento(data, user_email):
         # frequenza
         c.execute(f'''
             INSERT INTO Frequenza (descrizione, enabled)
-            VALUES ("{data['attività']['frequenza']['descrizione']}", 1)
-        ''')
+            VALUES (?, 1)
+        ''', (data['attività']['frequenza']['descrizione'], ))
 
         # attività
         c.execute(f'''
             INSERT INTO Attività (descrizione, frequenzaId, enabled)
-            VALUES ("{data['attività']['descrizione']}", {c.lastrowid}, 1)
-        ''')
+            VALUES (?, {c.lastrowid}, 1)
+        ''', (data['attività']['descrizione'], ))
 
         attività_id = c.lastrowid
+
+        # leaving this even tho we execute the query using tuples (sanitazation)
         intervento_mutation = f'''
             INSERT INTO Intervento (ts, note, sedeId, plessoId, attivitàId, utenteId, enabled)
             VALUES ({time.time()}, "{data['note']}", {sede_id}, {plesso_id}, {attività_id}, {user_id}, 1)
         '''
 
-        c.execute(intervento_mutation)
+        c.execute(f'''
+            INSERT INTO Intervento (ts, note, sedeId, plessoId, attivitàId, utenteId, enabled)
+            VALUES ({time.time()}, ?, {sede_id}, {plesso_id}, {attività_id}, {user_id}, 1)
+        ''', (data['note'], ))
 
         intervento_id = c.lastrowid
 
         # vano
         vano = c.execute(f'''
-            SELECT id FROM Vano WHERE codice = {data['vano']['codice']}
-        ''')
+            SELECT id FROM Vano WHERE codice = ? 
+        ''', (data['vano']['codice'], ))
         vano = vano.fetchall()
         vano_id = None
 
         if not len(vano):
             c.execute(f'''
                 INSERT INTO Vano (codice, descrizione, enabled)
-                VALUES ("{data['vano']['codice']}", "{data['vano']['descrizione']}", 1)
-            ''')
+                VALUES (?, ?, 1)
+            ''', (data['vano']['codice'], data['vano']['descrizione']))
 
             vano_id = c.lastrowid
         else:
@@ -234,8 +238,8 @@ def dbops_save_intervento(data, user_email):
         # prodotto
         c.execute(f'''
             INSERT INTO Prodotto (descrizione, enabled)
-            VALUES ("{data['prodotto']['descrizione']}", 1)
-        ''')
+            VALUES (?, 1)
+        ''', (data['prodotto']['descrizione'], ))
 
         prodotto_id = c.lastrowid
 
@@ -248,8 +252,8 @@ def dbops_save_intervento(data, user_email):
         # attrezzatura
         c.execute(f'''
             INSERT INTO Attrezzatura (descrizione, enabled)
-            VALUES ("{data['attrezzatura']['descrizione']}", 1)
-        ''')
+            VALUES (?, 1)
+        ''', (data['attrezzatura']['descrizione'], ))
 
         attrezzatura_id = c.lastrowid
 
@@ -319,6 +323,7 @@ def dbops_delete_intervento(intervento_id, user_email):
 
 
 def dbops_update_intervento(data, user_email):
+    # TODO: sanitazation
     '''
     NOTE: 
     non sapevo come gestire questa operazione in maniera efficiente
