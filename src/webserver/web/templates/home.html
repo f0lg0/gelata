@@ -31,7 +31,7 @@
                     <div class="interventi_container">
                         <!-- Add other fields -->
                         {% for i in interventi %}
-                        <intervento-card class="card_wrapper">
+                        <intervento-card class="card_wrapper" name="{{i.id}}">
                             <p slot="titolo">{{ i.id }}</p>
                             <p slot="data">{{ i.ts }}</p>
                             <p slot="note">{{ i.note }}</p>
@@ -43,6 +43,8 @@
                             <p slot="prodotto">{{ i.prodotto }}</p>
                             <p slot="attrezzatura">{{ i.attrezzatura }}</p>
                             <p slot="utente">{{ i.utente }}</p>
+                            <!-- janky fix -->
+                            <div slot="iid" style="position: absolute; opacity: 0; width: 400px; height: 50px" onclick="deleteIntervento('{{ i.id }}')"></div>
                         </intervento-card>
                         {% endfor %}
                     </div>
@@ -67,6 +69,14 @@
 
             function routeToProfile() {
                 location.href = "/profilo";
+            }
+
+            function deleteIntervento(iid) {
+                if (confirm("Vuoi eliminare questo intervento?")) {
+                    console.log("ELIMINAZIONE", iid);
+                } else {
+                    console.log("ABORT");
+                }
             }
         </script>
     </body>

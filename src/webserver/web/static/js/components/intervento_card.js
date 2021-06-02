@@ -291,6 +291,9 @@ template.innerHTML = `
             </div>
         </div>
         <div class="bottom">
+            <slot name="iid">
+                <div></div>
+            </slot>
             <p>
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.66667 8.16667H23.3333" stroke="#FF2825" stroke-linecap="round" stroke-linejoin="round"/>
@@ -311,6 +314,7 @@ export class InterventoCard extends HTMLElement {
         // clone template content nodes to the shadow DOM
         shadowRoot.appendChild(template.content.cloneNode(true));
     }
+    connectedCallback() {}
 }
 
 window.customElements.define("intervento-card", InterventoCard);
