@@ -41,6 +41,8 @@ def upload_intervento():
                 "descrizione": "descrizione attrezzatura",
             }
         }
+
+        print(request.form)
         result = dbops_save_intervento(data, session['profile']['email'])
         return result
 

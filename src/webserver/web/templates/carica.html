@@ -37,7 +37,7 @@
 
         <div class="Pagina">
             <div class="MainContainer">
-                <form action="/carica" method="POST">
+                <form action="/carica" id="form">
                     <div class="tipologia">
                         <h1>Carica Intervento</h1>
 
@@ -54,15 +54,15 @@
                     <div class="checkboxs" id="checkboxs"></div>
                     <div class="attrezzature">
                         <p>Attrezzature</p>
-                        <input styletype="text" class="sfondoattrezzature" />
+                        <input type="text" class="sfondoattrezzature" id="attrezzatura" />
                     </div>
                     <div class="ore">
                         <p>Ore inizio / Ora fine</p>
-                        <input type="time" class="sfondoora" /><input type="time" class="sfondoora" />
+                        <input type="time" class="sfondoora" id="ora_inizio" /><input type="time" class="sfondoora" id="ora_fine" />
                     </div>
                     <div class="note">
                         <p>Note</p>
-                        <textarea class="custom" type="text"></textarea>
+                        <textarea class="custom" type="text" id="note"></textarea>
                     </div>
                     <div class="carica">
                         <button type="submit">Carica</button>
@@ -70,6 +70,39 @@
                 </form>
             </div>
         </div>
+
+        <script>
+            function validateForm(formData) {}
+
+            document.getElementById("form").addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const tipologia = document.getElementById("tipologie").value;
+
+                const checkboxs = document.getElementsByClassName("opzione");
+                const checked = Array.from(checkboxs).filter((c) => c.checked);
+
+                const attrezzatura = document.getElementById("attrezzatura").value;
+
+                const ora_inizio = document.getElementById("ora_inizio").value;
+                const ora_fine = document.getElementById("ora_fine").value;
+
+                const note = document.getElementById("note").value;
+
+                const data = {
+                    tipologia,
+                    checkboxs: checked,
+                    attrezzatura,
+                    orario: {
+                        ora_inizio,
+                        ora_fine,
+                    },
+                    note,
+                };
+
+                console.log(data);
+            });
+        </script>
 
         <script>
             const att = {
@@ -143,11 +176,11 @@
                 let id = 0;
                 att[tipologie.value].forEach((a) => {
                     const cont = document.createElement("div");
-                    cont.className = "opzione";
 
                     const checkbox = document.createElement("input");
                     checkbox.type = "checkbox";
                     checkbox.value = a;
+                    checkbox.className = "opzione";
                     checkbox.id = `checkbox${id.toString()}`;
                     id += 1;
 
