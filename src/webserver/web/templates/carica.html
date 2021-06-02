@@ -4,60 +4,166 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>GELATA - Carica</title>
+        <title>Document</title>
+        <link rel="stylesheet" href="/css/carica.css" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;600;800;900&display=swap" rel="stylesheet" />
     </head>
-
     <body>
-        <h1>Carica intervento</h1>
-        <form action="http://127.0.0.1:5000/carica" method="post">
-            <div>
-                <label for="tipologia">Seleziona una tipologia:</label>
+        <script type="module" src="/js/components/navbar.js"></script>
+        <script type="module" src="/js/set_profile_pic.js"></script>
 
-                <select name="tipologia" id="tipologia">
-                    <option value="Giornaliero">Giornaliero</option>
-                    <option value="Settimanale">Settimanale</option>
-                    <option value="Mensile">Mensile</option>
-                    <option value="Annuale">Annuale</option>
-                </select>
+        <navbar-component></navbar-component>
+
+        <!-- janky -->
+        <div style="display: none">
+            <p id="user_pic">{{ user.picture }}</p>
+        </div>
+
+        <script>
+            // ! DA IMPLEMENTARE PER FORZA CON LA NAVBAR
+            function logout() {
+                location.href = "/logout";
+            }
+
+            function routeHome() {
+                location.href = "/";
+            }
+
+            function routeToProfile() {
+                location.href = "/profilo";
+            }
+        </script>
+
+        <div class="Pagina">
+            <div class="MainContainer">
+                <form action="/carica" method="POST">
+                    <div class="tipologia">
+                        <h1>Carica Intervento</h1>
+
+                        <div class="main_choice">
+                            <p>Seleziona la tipologia</p>
+                            <select name="Tipologia" id="tipologie">
+                                <option value="giornaliero" selected="selected">Giornaliero</option>
+                                <option value="settimanale">Settimanale</option>
+                                <option value="mensile">Mensile</option>
+                                <option value="annuale">Annuale</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="checkboxs" id="checkboxs"></div>
+                    <div class="attrezzature">
+                        <p>Attrezzature</p>
+                        <input styletype="text" class="sfondoattrezzature" />
+                    </div>
+                    <div class="ore">
+                        <p>Ore inizio / Ora fine</p>
+                        <input type="time" class="sfondoora" /><input type="time" class="sfondoora" />
+                    </div>
+                    <div class="note">
+                        <p>Note</p>
+                        <textarea class="custom" type="text"></textarea>
+                    </div>
+                    <div class="carica">
+                        <button type="submit">Carica</button>
+                    </div>
+                </form>
             </div>
+        </div>
 
-            <div>
-                <label for="attività">Identifica l'attività:</label>
+        <script>
+            const att = {
+                giornaliero: [
+                    "Sanificazione tazze, maniglie e interruttori (bagni)",
+                    "Pulizia servizi igenici",
+                    "Pulizia porte d'ingresso",
+                    "Pulizia tappeti d'ingresso",
+                    "Spazzatura pavimenti",
+                    "Pulizia corrimani e ringhiere",
+                    "Pulizia banchi, sedie, ecc.",
+                    "Pulizia interruttori (aule)",
+                    "Lavaggio lavagne",
+                    "Lavaggio pavimenti (aule, uffici e corridoi)",
+                    "Ripristino del materiale di consumo ",
+                    "Controllo e ripristino del gel igenizzante",
+                    "Rimozione immondizia e pulitura dei cestini",
+                    "Rimozione rifiuti cestini esterni",
+                    "Pulizia e disinfezione distributori e fotocopiatrici",
+                    "Pulizia ascensore",
+                    "Pulizia attrezzature utilizzate nei laboratori",
+                    "Lavaggio pavimenti (spogliatoi)",
+                    "Pulizia e disinfezione attrezzature della palestra",
+                    "Sanificazione con atomizzatore ",
+                ],
+                settimanale: [
+                    "Sanificazione a fondo di scrivanie, sedie, armadi ecc.",
+                    "Lavaggio cestini gettacarte, al bisogno",
+                    "Disinfezione tribune o gradoni per spettatori (palestra)",
+                    "Eliminare i rifiuti a terra(ambienti esterni)",
+                    "Pulizia e disinfezione di cancelli, ringhiere, tubi",
+                    "Spolveratura delle superfici e degli arredi esterni",
+                    "Pulizia porte, portoni, cancelli",
+                    "Pulizia attrezzi ginnici che non prevedono soventi contatti ",
+                ],
+                mensile: [
+                    "Pulizia e igienizzazione di caloriferi",
+                    "Pulizia vetri e infissi interni.",
+                    "Pulizia esterna (balconi ecc.)",
+                    "Disinfestazione da insetti.",
+                    "Pulizia bacheche e targhe.",
+                    "Pulizia e disinfezione interna ed esterna armadietti",
+                    "Lavaggio meccanico dei pavimenti.",
+                    "Pulizia archivi in uso e loro accesso.",
+                    "Asportazione delle ragnatele ed aspirazione soffitti.",
+                ],
+                annuale: [
+                    "Lavaggio dei punti luce.",
+                    "Pulizia dei vetri esterni delle finestre e davanzali delle aule.",
+                    "Aspirazione soffitti difficilmente raggiungibili ",
+                    "Lavaggio tende.",
+                    "Manutenzione dei pavimenti in legno, ceramica, ecc.",
+                    "Manutenzione dei pavimenti cerati e non cerati.",
+                    "Ambienti non utilizzati (scantinati, ecc.).",
+                    "Pulizie di vetrate e tettoie (a cura di esterni).",
+                    "Pulizia e disinfezione interna ed esterna armadietti ",
+                ],
+            };
+            const removeChildren = (parent) => {
+                while (parent.lastChild) {
+                    parent.removeChild(parent.lastChild);
+                }
+            };
 
-                <select name="attività" id="attività">
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                </select>
-            </div>
+            const tipologie = document.getElementById("tipologie");
 
-            <div>
-                <p>Attrezzature</p>
-                <input type="text" />
-            </div>
+            function populateCheckboxs() {
+                const container = document.getElementById("checkboxs");
+                removeChildren(container);
 
-            <div>
-                <p>Ore</p>
-                <input type="time" />
-            </div>
+                let id = 0;
+                att[tipologie.value].forEach((a) => {
+                    const cont = document.createElement("div");
+                    cont.className = "opzione";
 
-            <div>
-                <p>Note</p>
-                <input type="text" />
-            </div>
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.value = a;
+                    checkbox.id = `checkbox${id.toString()}`;
+                    id += 1;
 
-            <button type="submit">Carica</button>
-        </form>
+                    const label = document.createElement("label");
+                    label.for = id.toString();
+                    label.innerText = a;
 
-        <form action="/modifica" method="post">
-            <label for="mod">DEBUG MODIFICA</label>
-            <input type="submit" value="test" />
-        </form>
+                    cont.appendChild(checkbox);
+                    cont.appendChild(label);
 
+                    container.appendChild(cont);
+                });
+            }
 
-        <form action="/elimina" method="post">
-            <label for="mod">DEBUG ELIMINAZIONE</label>
-            <input type="submit" value="test" />
-        </form>
+            populateCheckboxs();
+            tipologie.addEventListener("change", populateCheckboxs);
+        </script>
     </body>
 </html>

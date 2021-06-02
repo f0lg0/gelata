@@ -12,7 +12,7 @@ interventi_handler = Blueprint("interventi_handler", __name__)
 @login_required
 def upload_intervento():
     if request.method == "GET":
-        return render_template("carica.html")
+        return render_template("carica.html", user=session['profile'])
     if request.method == "POST":
         # TODO: this is dummy data, we will eventually use form data
 

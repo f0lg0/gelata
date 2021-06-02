@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #101015;
+    color: #f2f2f2;
+    font-family: "Poppins", sans-serif;
+}
+.Pagina {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.MainContainer {
+    width: 80%;
+    max-width: 730px;
+    border-radius: 12px;
+    background-color: #21212b;
+    text-align: center;
+
+    /* janky */
+    margin-top: 700px;
+}
+
+.main_choice {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+
+    margin-top: 40px;
+}
+
+.main_choice p {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.tipologia {
+    margin-top: 30px;
+    margin-bottom: 45px;
+}
+
+.tipologia h1 {
+    font-size: 40px;
+}
+
+.note {
+    margin-bottom: 20px;
+}
+.checkboxs {
+    width: 60%;
+    background-color: #21212b;
+
+    margin: auto;
+    margin-bottom: 35px;
+    text-align: left;
+    font-size: smaller;
+    font-family: "Poppins", sans-serif, bold;
+}
+
+.checkboxs input {
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+.checkboxs label {
+    font-size: 20px;
+}
+
+.attivita {
+    margin-bottom: 80px;
+}
+.custom {
+    border-radius: 8px;
+    min-width: 400px;
+    max-width: 400px;
+    min-height: 150px;
+    max-height: 230px;
+}
+.sfondoattrezzature {
+    border-radius: 8px;
+}
+.ore {
+    margin-bottom: 20px;
+}
+.sfondoora {
+    color: rgb(60, 156, 219);
+    border-radius: 8px;
+}
+.carica {
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+.carica button {
+    width: 140px;
+    height: 40px;
+    color: #f2f2f2;
+    background-color: rgb(15, 99, 255);
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-color: white;
+    border-width: 2px;
+    border-radius: 6px;
+}
+
+.sfondoattrezzature {
+    border-radius: 8px;
+    min-width: 400px;
+    max-width: 400px;
+    min-height: 75px;
+    max-height: 115px;
+}
