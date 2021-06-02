@@ -1,6 +1,6 @@
 import time
 
-from flask import Blueprint, current_app, render_template, request, redirect, session
+from flask import Blueprint, current_app, render_template, request, redirect, session, abort
 from login_required import login_required
 
 from database_ops import dbops_save_intervento, dbops_update_intervento, dbops_delete_intervento
@@ -83,6 +83,9 @@ def update_intervento():
 
 @interventi_handler.route("/elimina", methods=["POST"])
 @login_required
-def delete_intervento(intervento_id=5):
-    # TODO: remove default value
-    return dbops_delete_intervento(intervento_id, session["profile"]["email"])
+def delete_intervento():
+    try:
+        intervento_id = int(request.form.get("iid"))
+        return dbops_delete_intervento(intervento_id, session["profile"]["email"])
+    except:
+        abort(400)

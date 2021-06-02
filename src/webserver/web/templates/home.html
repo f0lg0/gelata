@@ -31,7 +31,7 @@
                     <div class="interventi_container">
                         <!-- Add other fields -->
                         {% for i in interventi %}
-                        <intervento-card class="card_wrapper" name="{{i.id}}">
+                        <intervento-card class="card_wrapper" id="intervento{{i.id}}">
                             <p slot="titolo">{{ i.id }}</p>
                             <p slot="data">{{ i.ts }}</p>
                             <p slot="note">{{ i.note }}</p>
@@ -71,11 +71,22 @@
                 location.href = "/profilo";
             }
 
-            function deleteIntervento(iid) {
+            async function deleteIntervento(iid) {
                 if (confirm("Vuoi eliminare questo intervento?")) {
-                    console.log("ELIMINAZIONE", iid);
-                } else {
-                    console.log("ABORT");
+                    let data = new URLSearchParams();
+                    data.append("iid", iid);
+
+                    const res = await fetch(`${location.href}elimina`, {
+                        method: "POST",
+                        body: data,
+                    });
+
+                    const json = await res.json();
+                    if (json.success) {
+                        document.getElementById(`intervento${iid}`).style.display = "none";
+                    } else {
+                        alert(json.message);
+                    }
                 }
             }
         </script>
