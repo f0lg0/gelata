@@ -34,6 +34,40 @@ body {
     background-color: #21212b;
 }
 
+.create_btn_container {
+    width: 80%;
+    height: 50px;
+    margin: auto;
+    margin-top: 100px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.create_btn {
+    height: 100%;
+    margin-right: 10px;
+
+    border-radius: 100px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.create_btn svg {
+    stroke: rgb(15, 99, 255);
+}
+
+.create_btn_container p {
+    font-weight: bold;
+    font-size: 20px;
+}
+
 @media only screen and (max-width: 700px) {
     .left_bar {
         display: none;
