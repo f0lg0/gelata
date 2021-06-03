@@ -17,13 +17,13 @@ def upload_intervento():
         data = {
             "note": request.json["note"],
             "sede": {
-                "descrizione": "Ghedi",
+                "descrizione": request.json["sede"],
             },
             "plesso": {
-                "descrizione": "*Plesso da definire*"
+                "descrizione": request.json["plesso"],
             },
             "vano": {
-                "codice": "*Codice vano da definire*",
+                "codice": int(request.json["vano"]),
                 "descrizione": "*Descrizione del vano da definire"
             },
             "attività": {
@@ -33,7 +33,7 @@ def upload_intervento():
                 }
             },
             "prodotto": {
-                "descrizione": "*Prodotti da definire*"
+                "descrizione": request.json["prodotti"],
             },
             "attrezzatura": {
                 "descrizione": request.json['attrezzatura']

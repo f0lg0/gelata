@@ -24,7 +24,7 @@ body {
     text-align: center;
 
     /* janky */
-    margin-top: 700px;
+    margin-top: 1300px;
 }
 
 .main_choice {
@@ -87,8 +87,13 @@ body {
 .sfondoattrezzature {
     border-radius: 8px;
 }
-.ore {
+.ore,
+.sede,
+.plesso,
+.vano,
+.prodotti {
     margin-bottom: 20px;
+    margin-top: 25px;
 }
 .sfondoora {
     color: rgb(60, 156, 219);
@@ -116,4 +121,9 @@ body {
     max-width: 400px;
     min-height: 75px;
     max-height: 115px;
+}
+
+textarea,
+input {
+    padding: 10px;
 }

@@ -54,11 +54,27 @@
                     <div class="checkboxs" id="checkboxs"></div>
                     <div class="attrezzature">
                         <p>Attrezzature</p>
-                        <input type="text" class="sfondoattrezzature" id="attrezzatura" />
+                        <textarea class="custom sfondoattrezzature" type="text" id="attrezzatura"></textarea>
                     </div>
                     <div class="ore">
                         <p>Ore inizio / Ora fine</p>
                         <input type="time" class="sfondoora" id="ora_inizio" /><input type="time" class="sfondoora" id="ora_fine" />
+                    </div>
+                    <div class="sede">
+                        <p>Sede</p>
+                        <input type="text" name="sede" id="sede" />
+                    </div>
+                    <div class="plesso">
+                        <p>Plesso</p>
+                        <input type="text" name="plesso" id="plesso" />
+                    </div>
+                    <div class="vano">
+                        <p>Codice vano</p>
+                        <input type="number" min="0" name="vano" id="vano" />
+                    </div>
+                    <div class="prodotti">
+                        <p>Prodotti</p>
+                        <textarea class="custom sfondoattrezzature" type="text" id="prodotti"></textarea>
                     </div>
                     <div class="note">
                         <p>Note</p>
@@ -75,11 +91,15 @@
             function validateForm(formData) {
                 return (
                     formData.tipologia != "" &&
-                    formData.checkboxs.length != 0 &&
-                    formData.attrezzatura != "" &&
-                    formData.orario.ora_inizio != "" &&
-                    formData.orario.ora_fine != "" &&
-                    formData.note != ""
+                        formData.checkboxs.length != 0 &&
+                        formData.attrezzatura != "" &&
+                        formData.orario.ora_inizio != "" &&
+                        formData.orario.ora_fine != "" &&
+                        formData.note != "" &&
+                        formData.sede != "" &&
+                        formData.plesso != "" &&
+                        formData.vano != "",
+                    formData.prodotti != ""
                 );
             }
 
@@ -97,6 +117,11 @@
                 const ora_inizio = document.getElementById("ora_inizio").value;
                 const ora_fine = document.getElementById("ora_fine").value;
 
+                const sede = document.getElementById("sede").value;
+                const plesso = document.getElementById("plesso").value;
+                const vano = document.getElementById("vano").value;
+                const prodotti = document.getElementById("prodotti").value;
+
                 const note = document.getElementById("note").value;
 
                 const data = {
@@ -108,6 +133,10 @@
                         ora_fine,
                     },
                     note,
+                    sede,
+                    plesso,
+                    vano,
+                    prodotti,
                 };
 
                 if (validateForm(data)) {
