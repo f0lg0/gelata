@@ -14,35 +14,34 @@ def upload_intervento():
     if request.method == "GET":
         return render_template("carica.html", user=session['profile'])
     if request.method == "POST":
-        # TODO: this is dummy data, we will eventually use form data
-
         data = {
-            "note": "note",
+            "note": request.json["note"],
             "sede": {
-                "descrizione": "descrizione sede",
+                "descrizione": "Ghedi",
             },
             "plesso": {
-                "descrizione": "descrizione plesso",
+                "descrizione": "*Plesso da definire*"
             },
             "vano": {
-                "codice": 123,
-                "descrizione": "descrizione vano",
+                "codice": "*Codice vano da definire*",
+                "descrizione": "*Descrizione del vano da definire"
             },
             "attività": {
-                "descrizione": "descrizione attività",
+                "descrizione": ', '.join(request.json["checkboxs"]),
                 "frequenza": {
-                    "descrizione": "descrizione evento",
-                },
+                    "descrizione": f"{request.json['orario']['ora_inizio']}/{request.json['orario']['ora_fine']}"
+                }
             },
             "prodotto": {
-                "descrizione": "descrizione prodotto",
+                "descrizione": "*Prodotti da definire*"
             },
             "attrezzatura": {
-                "descrizione": "descrizione attrezzatura",
+                "descrizione": request.json['attrezzatura']
             }
         }
 
-        print(request.form)
+        print(data)
+
         result = dbops_save_intervento(data, session['profile']['email'])
         return result
 

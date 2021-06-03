@@ -72,15 +72,25 @@
         </div>
 
         <script>
-            function validateForm(formData) {}
+            function validateForm(formData) {
+                return (
+                    formData.tipologia != "" &&
+                    formData.checkboxs.length != 0 &&
+                    formData.attrezzatura != "" &&
+                    formData.orario.ora_inizio != "" &&
+                    formData.orario.ora_fine != "" &&
+                    formData.note != ""
+                );
+            }
 
-            document.getElementById("form").addEventListener("submit", (e) => {
+            document.getElementById("form").addEventListener("submit", async (e) => {
                 e.preventDefault();
 
                 const tipologia = document.getElementById("tipologie").value;
 
                 const checkboxs = document.getElementsByClassName("opzione");
                 const checked = Array.from(checkboxs).filter((c) => c.checked);
+                const extracted_checkboxs = checked.map((c) => c.value);
 
                 const attrezzatura = document.getElementById("attrezzatura").value;
 
@@ -91,7 +101,7 @@
 
                 const data = {
                     tipologia,
-                    checkboxs: checked,
+                    checkboxs: extracted_checkboxs,
                     attrezzatura,
                     orario: {
                         ora_inizio,
@@ -100,7 +110,25 @@
                     note,
                 };
 
-                console.log(data);
+                if (validateForm(data)) {
+                    const res = await fetch(location.href, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    });
+
+                    const json = await res.json();
+
+                    if (json.success) {
+                        location.href = "/";
+                    } else {
+                        alert(json.message);
+                    }
+                } else {
+                    alert("Completa tuttti i campi!");
+                }
             });
         </script>
 
@@ -126,7 +154,7 @@
                     "Pulizia attrezzature utilizzate nei laboratori",
                     "Lavaggio pavimenti (spogliatoi)",
                     "Pulizia e disinfezione attrezzature della palestra",
-                    "Sanificazione con atomizzatore ",
+                    "Sanificazione con atomizzatore",
                 ],
                 settimanale: [
                     "Sanificazione a fondo di scrivanie, sedie, armadi ecc.",
@@ -136,7 +164,7 @@
                     "Pulizia e disinfezione di cancelli, ringhiere, tubi",
                     "Spolveratura delle superfici e degli arredi esterni",
                     "Pulizia porte, portoni, cancelli",
-                    "Pulizia attrezzi ginnici che non prevedono soventi contatti ",
+                    "Pulizia attrezzi ginnici che non prevedono soventi contatti",
                 ],
                 mensile: [
                     "Pulizia e igienizzazione di caloriferi",
@@ -152,13 +180,13 @@
                 annuale: [
                     "Lavaggio dei punti luce.",
                     "Pulizia dei vetri esterni delle finestre e davanzali delle aule.",
-                    "Aspirazione soffitti difficilmente raggiungibili ",
+                    "Aspirazione soffitti difficilmente raggiungibili",
                     "Lavaggio tende.",
                     "Manutenzione dei pavimenti in legno, ceramica, ecc.",
                     "Manutenzione dei pavimenti cerati e non cerati.",
                     "Ambienti non utilizzati (scantinati, ecc.).",
                     "Pulizie di vetrate e tettoie (a cura di esterni).",
-                    "Pulizia e disinfezione interna ed esterna armadietti ",
+                    "Pulizia e disinfezione interna ed esterna armadietti",
                 ],
             };
             const removeChildren = (parent) => {

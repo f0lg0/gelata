@@ -37,7 +37,12 @@ def home():
 
     # retreive first 10 entries
     res = dbops_get_interventi_by_user(session["profile"]["email"])
-    return render_template("home.html", user=dict(session)['profile'], interventi=res["interventi"])
+    print(res)
+
+    if res["success"]:
+        return render_template("home.html", user=dict(session)['profile'], interventi=res["interventi"])
+    else:
+        return render_template("home.html", user=dict(session)['profile'], interventi=[])
 
 
 def main():
